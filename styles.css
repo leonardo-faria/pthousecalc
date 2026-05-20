@@ -1821,3 +1821,256 @@ table td:first-child {
         font-size: 0.9em;
     }
 }
+
+/* Print button styles */
+.header-btn-txt {
+    background: linear-gradient(135deg, #00b09b, #96c93d);
+}
+
+.header-btn-txt:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0, 176, 155, 0.4);
+}
+
+.header-btn-print {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+}
+
+.header-btn-print:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+}
+
+/* ==========================================
+   PRINT STYLES
+   ========================================== */
+@media print {
+    /* Reset page */
+    * {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+    }
+
+    body {
+        font-size: 11pt;
+        line-height: 1.4;
+        color: #000;
+        background: #fff;
+        margin: 0;
+        padding: 0;
+    }
+
+    .container {
+        max-width: 100%;
+        padding: 0;
+        margin: 0;
+    }
+
+    /* Hide interactive elements */
+    .header-actions,
+    .hidden-input,
+    button,
+    input[type="file"],
+    .add-house-btn-blue,
+    .remove-house-btn-sm,
+    .use-total-btn,
+    .amortization-tabs {
+        display: none !important;
+    }
+
+    /* Hide charts (they don't print well) */
+    .charts-grid,
+    canvas {
+        display: none !important;
+    }
+
+    /* Header */
+    .header {
+        background: none !important;
+        color: #000 !important;
+        padding: 10pt 0 !important;
+        text-align: left;
+        border-bottom: 2pt solid #000;
+        margin-bottom: 15pt;
+    }
+
+    .header h1 {
+        color: #000 !important;
+        font-size: 18pt;
+        margin: 0;
+    }
+
+    .header p {
+        color: #444 !important;
+        font-size: 10pt;
+        margin: 4pt 0 0;
+    }
+
+    /* Sections */
+    .page-section {
+        padding: 10pt 0 !important;
+        border: none !important;
+        border-radius: 0 !important;
+        box-shadow: none !important;
+        background: none !important;
+        page-break-inside: avoid;
+    }
+
+    .section-bordered,
+    .section-bordered-light {
+        border: 1pt solid #ccc !important;
+        padding: 10pt !important;
+        margin-bottom: 10pt;
+    }
+
+    .section-title,
+    .section-subtitle,
+    .subsection-title {
+        color: #000 !important;
+    }
+
+    /* Main content grid */
+    .main-content {
+        display: block !important;
+    }
+
+    .input-section,
+    .results-section {
+        width: 100% !important;
+        max-width: 100% !important;
+    }
+
+    /* Input fields - show as text */
+    input[type="number"],
+    input[type="text"] {
+        border: none !important;
+        background: none !important;
+        box-shadow: none !important;
+        padding: 0 2pt !important;
+        font-weight: bold;
+        font-size: 10pt;
+    }
+
+    select {
+        border: none !important;
+        background: none !important;
+        -webkit-appearance: none;
+        appearance: none;
+        font-weight: bold;
+    }
+
+    /* Checkbox styling for print */
+    .checkbox-group {
+        margin: 4pt 0;
+    }
+
+    /* Result cards */
+    .result-card {
+        background: none !important;
+        border: 1pt solid #ddd !important;
+        box-shadow: none !important;
+        padding: 8pt !important;
+        margin: 5pt 0 !important;
+        page-break-inside: avoid;
+    }
+
+    .result-card h3 {
+        color: #000 !important;
+    }
+
+    .result-item {
+        border-bottom: 0.5pt solid #eee;
+        padding: 3pt 0;
+    }
+
+    /* IRS Section */
+    .irs-buyer-card,
+    .irs-house-card,
+    .irs-calc-box,
+    .irs-sale-summary {
+        background: none !important;
+        border: 1pt solid #ccc !important;
+        box-shadow: none !important;
+        page-break-inside: avoid;
+    }
+
+    .irs-stats-grid,
+    .irs-calc-grid,
+    .irs-sale-summary-grid {
+        gap: 5pt !important;
+    }
+
+    /* Buyer cards */
+    .buyer-card,
+    .contribution-card {
+        background: none !important;
+        border: 1pt solid #ccc !important;
+        box-shadow: none !important;
+        page-break-inside: avoid;
+    }
+
+    /* Amortization tables */
+    .amortization-table-container {
+        overflow: visible !important;
+        max-height: none !important;
+    }
+
+    table {
+        font-size: 8pt;
+        page-break-inside: auto;
+    }
+
+    tr {
+        page-break-inside: avoid;
+    }
+
+    th, td {
+        padding: 3pt 5pt !important;
+        border: 0.5pt solid #ccc !important;
+    }
+
+    th {
+        background: #f0f0f0 !important;
+        color: #000 !important;
+    }
+
+    /* Down payment display */
+    .down-payment-display {
+        background: none !important;
+        border: 1pt solid #ccc !important;
+    }
+
+    /* House sell cards */
+    .house-sell-card {
+        background: none !important;
+        border: 1pt solid #ccc !important;
+        box-shadow: none !important;
+    }
+
+    /* Money pool section */
+    .money-pool-section {
+        background: none !important;
+        border: 1pt solid #ccc !important;
+    }
+
+    /* Page breaks */
+    .section-buyers {
+        page-break-after: auto;
+    }
+
+    #irsSection {
+        page-break-before: always;
+    }
+
+    /* Links */
+    a {
+        color: #000 !important;
+        text-decoration: none !important;
+    }
+
+    /* Footer for print */
+    @page {
+        margin: 15mm;
+        size: A4;
+    }
+}

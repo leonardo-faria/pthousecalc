@@ -1221,6 +1221,160 @@ function loadSimulation(event) {
     event.target.value = '';
 }
 
+function exportTXT() {
+    const {
+        homePrice, interestRate, loanTerm,
+        isPermanentResidence, vpt, taxaIMI, seguroVida, seguroMultirriscos
+    } = getInputValues();
+    
+    const pool = calculateTotalPoolValues();
+    const totalInvestment = pool.totalContributing;
+    
+    const imt = calculateIMT(homePrice, isPermanentResidence);
+    const impostoSeloEscritura = calculateImpostoSeloEscritura(homePrice);
+    const registoEscritura = 700;
+    const isRate = loanTerm > 5 ? 0.006 : 0.005;
+    const fixedCosts = imt + impostoSeloEscritura + registoEscritura;
+    const loanAmount = Math.max(0, (homePrice - totalInvestment + fixedCosts) / (1 - isRate));
+    const impostoSeloCredito = loanAmount * isRate;
+    const totalImpostos = fixedCosts + impostoSeloCredito;
+    const entrada = Math.max(0, totalInvestment - totalImpostos);
+    
+    const monthlyMortgage = calculateMortgage(loanAmount, interestRate, loanTerm);
+    const monthlyIMI = calculateIMI(vpt || homePrice * 0.7, taxaIMI) / 12;
+    const totalMonthly = monthlyMortgage + monthlyIMI + seguroVida + seguroMultirriscos;
+    const totalPaid = monthlyMortgage * loanTerm * 12;
+    const totalInterest = totalPaid - loanAmount;
+    
+    const fmt = (v) => formatCurrency(v).replace('\u00a0', ' ');
+    const line = (label, value) => `  ${label.padEnd(40)} ${value}`;
+    const sep = '='.repeat(60);
+    const sepLight = '-'.repeat(60);
+    
+    let txt = '';
+    txt += sep + '\n';
+    txt += '  SIMULAÇÃO DE COMPRA DE CASA — PORTUGAL\n';
+    txt += `  Data: ${new Date().toLocaleDateString('pt-PT')}\n`;
+    txt += sep + '\n\n';
+    
+    // Property details
+    txt += '  DADOS DO IMÓVEL\n';
+    txt += sepLight + '\n';
+    txt += line('Preço do Imóvel:', fmt(homePrice)) + '\n';
+    txt += line('Tipo:', isPermanentResidence ? 'Habitação Própria Permanente (HPP)' : 'Segunda Habitação') + '\n';
+    txt += line('VPT:', fmt(vpt || homePrice * 0.7)) + '\n';
+    txt += line('Taxa IMI:', taxaIMI + '%') + '\n';
+    txt += '\n';
+    
+    // Credit
+    txt += '  CRÉDITO HABITAÇÃO\n';
+    txt += sepLight + '\n';
+    txt += line('Taxa de Juro Anual:', interestRate + '%') + '\n';
+    txt += line('Prazo:', loanTerm + ' anos') + '\n';
+    txt += line('Montante do Crédito:', fmt(loanAmount)) + '\n';
+    txt += line('Entrada (capitais próprios):', fmt(entrada)) + '\n';
+    txt += line('LTV:', (homePrice > 0 ? (loanAmount / homePrice * 100).toFixed(1) : 0) + '%') + '\n';
+    txt += '\n';
+    
+    // Monthly costs
+    txt += '  ENCARGOS MENSAIS\n';
+    txt += sepLight + '\n';
+    txt += line('Prestação:', fmt(monthlyMortgage)) + '\n';
+    txt += line('IMI (mensal):', fmt(monthlyIMI)) + '\n';
+    txt += line('Seguro de Vida:', fmt(seguroVida)) + '\n';
+    txt += line('Seguro Multirriscos:', fmt(seguroMultirriscos)) + '\n';
+    txt += line('TOTAL MENSAL:', fmt(totalMonthly)) + '\n';
+    txt += '\n';
+    
+    // Initial costs
+    txt += '  CUSTOS INICIAIS (ESCRITURA)\n';
+    txt += sepLight + '\n';
+    txt += line('IMT:', fmt(imt)) + '\n';
+    txt += line('Imposto de Selo:', fmt(impostoSeloEscritura + impostoSeloCredito)) + '\n';
+    txt += line('Registo e Escritura:', fmt(registoEscritura)) + '\n';
+    txt += line('TOTAL INVESTIMENTO INICIAL:', fmt(totalInvestment)) + '\n';
+    txt += '\n';
+    
+    // Lifetime totals
+    txt += '  TOTAIS AO LONGO DO CRÉDITO (' + loanTerm + ' ANOS)\n';
+    txt += sepLight + '\n';
+    txt += line('Total de Juros:', fmt(totalInterest)) + '\n';
+    txt += line('Total Pago ao Banco:', fmt(totalPaid)) + '\n';
+    txt += line('IMI (total):', fmt(monthlyIMI * 12 * loanTerm)) + '\n';
+    txt += line('Seguro de Vida (total):', fmt(seguroVida * 12 * loanTerm)) + '\n';
+    txt += line('Seguro Multirriscos (total):', fmt(seguroMultirriscos * 12 * loanTerm)) + '\n';
+    txt += '\n';
+    
+    // Buyers
+    txt += '  COMPRADORES\n';
+    txt += sepLight + '\n';
+    buyers.forEach(buyer => {
+        const startingCash = parseFloat(buyer.startingCash) || 0;
+        const houseProceeds = calculateBuyerHouseProceeds(buyer);
+        const availableCash = startingCash + houseProceeds;
+        const contribution = parseFloat(buyer.contributionAmount) || 0;
+        const irsRate = (parseFloat(buyer.irsRate) || 28.5) / 100;
+        
+        txt += `\n  ${buyer.name} (Taxa IRS: ${(irsRate * 100).toFixed(1)}%)\n`;
+        txt += line('  Poupanças:', fmt(startingCash)) + '\n';
+        if (houseProceeds > 0) {
+            txt += line('  Líquido venda imóveis:', fmt(houseProceeds)) + '\n';
+        }
+        txt += line('  Total Disponível:', fmt(Math.max(0, availableCash))) + '\n';
+        txt += line('  Contribuição:', fmt(contribution)) + '\n';
+        txt += line('  Reserva:', fmt(Math.max(0, availableCash - contribution))) + '\n';
+        
+        // House sales
+        if (buyer.housesToSell && buyer.housesToSell.length > 0) {
+            buyer.housesToSell.forEach((house, idx) => {
+                const salePrice = parseFloat(house.salePrice) || 0;
+                const currentBalance = parseFloat(house.currentBalance) || 0;
+                const comissaoPercent = house.comissaoPercent != null ? parseFloat(house.comissaoPercent) : 5;
+                const anosDetencao = house.anosDetencao != null ? parseFloat(house.anosDetencao) : 5;
+                const valorAquisicao = parseFloat(house.valorAquisicao) || salePrice * 0.7;
+                const isHPP = house.isHPP !== false;
+                
+                const comissao = calculateComissaoImobiliaria(salePrice, comissaoPercent);
+                const maisValiaTributavel = calculateMaisValias(salePrice, valorAquisicao, anosDetencao, 0, comissao);
+                const reinvestmentRatio = isHPP ? calculateHPPReinvestmentRatio(buyer, salePrice, currentBalance) : 0;
+                const impostoSemIsencao = maisValiaTributavel * irsRate;
+                const impostoMaisValias = isHPP ? impostoSemIsencao * (1 - reinvestmentRatio) : impostoSemIsencao;
+                const custoAmortizacao = calculateAmortizacaoAntecipada(currentBalance, false);
+                const distrate = currentBalance > 0 ? 150 : 0;
+                const netProceeds = Math.max(0, salePrice - comissao - impostoMaisValias - currentBalance - custoAmortizacao - distrate);
+                
+                txt += `\n    Imóvel ${idx + 1}: ${isHPP ? 'HPP' : 'Segunda Habitação'}\n`;
+                txt += line('    Preço de Venda:', fmt(salePrice)) + '\n';
+                txt += line('    Valor Aquisição:', fmt(valorAquisicao)) + '\n';
+                txt += line('    Anos de Posse:', anosDetencao + '') + '\n';
+                txt += line('    Comissão (' + comissaoPercent + '% + IVA):', fmt(comissao)) + '\n';
+                txt += line('    Mais-valias tributáveis (50%):', fmt(maisValiaTributavel)) + '\n';
+                if (isHPP) {
+                    txt += line('    Reinvestimento HPP:', (reinvestmentRatio * 100).toFixed(1) + '%') + '\n';
+                }
+                txt += line('    Imposto mais-valias:', fmt(impostoMaisValias)) + '\n';
+                if (currentBalance > 0) {
+                    txt += line('    Liquidação crédito:', fmt(currentBalance)) + '\n';
+                    txt += line('    Penaliz. amortização:', fmt(custoAmortizacao)) + '\n';
+                }
+                txt += line('    LÍQUIDO DA VENDA:', fmt(netProceeds)) + '\n';
+            });
+        }
+    });
+    
+    txt += '\n' + sep + '\n';
+    txt += '  Gerado por: Calculadora de Compra de Casa — Portugal\n';
+    txt += sep + '\n';
+    
+    const blob = new Blob([txt], { type: 'text/plain;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `simulacao-casa-${new Date().toISOString().slice(0, 10)}.txt`;
+    a.click();
+    URL.revokeObjectURL(url);
+}
+
 // Export for testing (Node.js / CommonJS)
 if (typeof module !== 'undefined' && module.exports) {
     module.exports = {

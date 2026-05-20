@@ -15,8 +15,10 @@
             <h1>🏠 Calculadora de Compra de Casa</h1>
             <p>Simula todos os custos associados à compra de habitação em Portugal</p>
             <div class="header-actions">
-                <button onclick="saveSimulation()" class="header-btn header-btn-save">💾 Guardar Simulação</button>
-                <button onclick="document.getElementById('loadFileInput').click()" class="header-btn header-btn-load">📂 Carregar Simulação</button>
+                <button onclick="saveSimulation()" class="header-btn header-btn-save">💾 Guardar</button>
+                <button onclick="document.getElementById('loadFileInput').click()" class="header-btn header-btn-load">📂 Carregar</button>
+                <button onclick="exportTXT()" class="header-btn header-btn-txt">📄 Exportar TXT</button>
+                <button onclick="window.print()" class="header-btn header-btn-print">🖨️ Imprimir</button>
                 <input type="file" id="loadFileInput" accept=".json" class="hidden-input" onchange="loadSimulation(event)">
             </div>
         </div>
