@@ -113,7 +113,7 @@ function renderBuyers() {
     const container = document.getElementById('buyersContainer');
     
     if (buyers.length === 0) {
-        container.innerHTML = '<p style="color: #999; font-style: italic; padding: 20px;">Ainda não foram adicionados compradores. Clique em "Adicionar Comprador" para começar.</p>';
+        container.innerHTML = '<p class="empty-state">Ainda não foram adicionados compradores. Clique em "Adicionar Comprador" para começar.</p>';
         document.getElementById('moneyPoolSection').style.display = 'none';
         const existingSection = container.parentElement.querySelector('[data-contribution-section="true"]');
         if (existingSection) {
@@ -140,10 +140,10 @@ function renderBuyers() {
                     <div>
                         <div class="buyer-card-title">
                             <input type="text" value="${buyer.name}" 
-                                   style="border: 1px solid #ccc; padding: 5px 10px; border-radius: 4px; font-weight: 700; font-size: 1.1em;"
+                                   class="buyer-name-input"
                                    onchange="updateBuyerField(${buyer.id}, 'name', this.value)">
                         </div>
-                        <div style="color: #999; font-size: 0.9em; margin-top: 5px;">Comprador #${index + 1}</div>
+                        <div class="buyer-card-subtitle">Comprador #${index + 1}</div>
                     </div>
                     ${buyers.length > 1 ? `<button class="remove-buyer-btn" onclick="removeBuyer(${buyer.id})">Remover</button>` : ''}
                 </div>
@@ -162,11 +162,11 @@ function renderBuyers() {
                     <div class="input-helper">Escalão em que se enquadra (para mais-valias)</div>
                 </div>
                 
-                <div style="background: #e8f4f8; padding: 15px; border-radius: 6px; margin-top: 15px;">
-                    <div style="font-weight: 600; margin-bottom: 10px; color: #333;">Imóveis para Vender</div>
-                    <div id="housesToSell_${buyer.id}" style="margin-bottom: 10px;">
+                <div class="houses-sell-section">
+                    <div class="houses-sell-title">Imóveis para Vender</div>
+                    <div id="housesToSell_${buyer.id}" class="houses-sell-list">
                     </div>
-                    <button class="add-house-btn" style="background: #4facfe; margin-top: 10px;" onclick="addHouseToBuyerSell(${buyer.id})">+ Adicionar Imóvel</button>
+                    <button class="add-house-btn add-house-btn-blue" onclick="addHouseToBuyerSell(${buyer.id})">+ Adicionar Imóvel</button>
                 </div>
                 
                 <div class="buyer-summary-grid">
@@ -368,14 +368,14 @@ function renderBuyerHouses(buyerId) {
         const maisValiaTotal = salePrice - valorAquisicaoAtualizado - comissao;
         
         return `
-            <div style="background: white; padding: 12px; border-radius: 6px; margin-bottom: 10px; border: 1px solid #e0e0e0;">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-                    <div style="font-weight: 600; color: #333;">Imóvel #${idx + 1}</div>
-                    <button class="remove-house-btn" style="padding: 4px 10px; font-size: 0.8em;" onclick="removeHouseFromBuyerSell(${buyerId}, ${house.id})">Remover</button>
+            <div class="house-sell-card">
+                <div class="house-sell-card-header">
+                    <div class="house-sell-card-title">Imóvel #${idx + 1}</div>
+                    <button class="remove-house-btn remove-house-btn-sm" onclick="removeHouseFromBuyerSell(${buyerId}, ${house.id})">Remover</button>
                 </div>
-                <div style="margin-bottom: 10px;">
-                    <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 0.85em; font-weight: 500; color: #333;">
-                        <input type="checkbox" ${isHPP ? 'checked' : ''} style="width: auto;"
+                <div class="house-sell-checkbox-group">
+                    <label class="checkbox-label checkbox-label-sm">
+                        <input type="checkbox" ${isHPP ? 'checked' : ''} class="checkbox-input"
                                onchange="updateBuyerHouse(${buyerId}, ${house.id}, 'isHPP', this.checked)">
                         Habitação Própria Permanente (HPP)
                         <span class="tooltip-icon" data-tooltip="Se HPP e reinvestir em nova HPP dentro de 36 meses: isenção de mais-valias. Se não for HPP: 50% tributado à taxa marginal.">?</span>
@@ -415,8 +415,8 @@ function renderBuyerHouses(buyerId) {
                                onchange="updateBuyerHouse(${buyerId}, ${house.id}, 'comissaoPercent', this.value)">
                     </div>
                 </div>
-                <div style="font-size: 0.8em; color: #666; margin-top: 8px; padding: 10px; background: #f8f8f8; border-radius: 4px;">
-                    <div style="font-weight: 600; margin-bottom: 6px; color: #555;">Custos da Venda:</div>
+                <div class="house-sell-costs-summary">
+                    <div class="house-sell-costs-title">Custos da Venda:</div>
                     <div style="display: flex; justify-content: space-between;"><span>Comissão: ${formatCurrency(salePrice)} × ${comissaoPercent}% = ${formatCurrency(comissaoBase)}</span><span></span></div>
                     <div style="display: flex; justify-content: space-between;"><span>+ IVA 23%: ${formatCurrency(comissaoBase)} × 23% = ${formatCurrency(comissaoIVA)}</span><span></span></div>
                     <div style="display: flex; justify-content: space-between; font-weight: 600;"><span>= Comissão total</span><span>-${formatCurrency(comissao)}</span></div>
@@ -432,7 +432,7 @@ function renderBuyerHouses(buyerId) {
                     <div style="display: flex; justify-content: space-between;"><span>Distrate (cancelamento hipoteca)</span><span>-${formatCurrency(distrate)}</span></div>
                     ` : ''}
                 </div>
-                <div style="font-size: 0.9em; color: #333; margin-top: 8px; font-weight: 600;">Líquido: <span style="color: #28a745;">${formatCurrency(Math.max(0, netProceeds))}</span></div>
+                <div class="house-sell-net">Líquido: <span class="text-success">${formatCurrency(Math.max(0, netProceeds))}</span></div>
             </div>
         `;
     }).join('');
@@ -505,7 +505,7 @@ function renderIRSSection() {
     const buyersWithHouses = buyers.filter(b => (b.housesToSell || []).length > 0);
     
     if (buyersWithHouses.length === 0) {
-        container.innerHTML = '<p style="color: #999; font-style: italic;">Nenhum comprador tem imóveis para vender — não há mais-valias a declarar.</p>';
+        container.innerHTML = '<p class="empty-state">Nenhum comprador tem imóveis para vender — não há mais-valias a declarar.</p>';
         return;
     }
     
@@ -555,32 +555,32 @@ function renderIRSSection() {
                     </div>
                     
                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; font-size: 0.9em;">
-                        <div style="padding: 8px; background: #f8f9fa; border-radius: 4px;">
-                            <div style="color: #666;">Valor de Aquisição</div>
-                            <div style="font-weight: 600;">${formatCurrency(valorAquisicao)}</div>
-                            <div style="color: #999; font-size: 0.8em;">Preço pago na compra original</div>
+                        <div class="irs-stat-item">
+                            <div class="irs-stat-label">Valor de Aquisição</div>
+                            <div class="irs-stat-value">${formatCurrency(valorAquisicao)}</div>
+                            <div class="irs-stat-hint">Preço pago na compra original</div>
                         </div>
-                        <div style="padding: 8px; background: #f8f9fa; border-radius: 4px;">
-                            <div style="color: #666;">Coef. Atualização (${anosDetencao} anos)</div>
-                            <div style="font-weight: 600;">${coeficiente.toFixed(4)}</div>
-                            <div style="color: #999; font-size: 0.8em;">≈ 2%/ano (inflação, Art.º 50 CIRS)</div>
+                        <div class="irs-stat-item">
+                            <div class="irs-stat-label">Coef. Atualização (${anosDetencao} anos)</div>
+                            <div class="irs-stat-value">${coeficiente.toFixed(4)}</div>
+                            <div class="irs-stat-hint">≈ 2%/ano (inflação, Art.º 50 CIRS)</div>
                         </div>
-                        <div style="padding: 8px; background: #f8f9fa; border-radius: 4px;">
-                            <div style="color: #666;">Valor Aquisição Atualizado</div>
-                            <div style="font-weight: 600;">${formatCurrency(valorAquisicaoAtualizado)}</div>
-                            <div style="color: #999; font-size: 0.8em;">${formatCurrency(valorAquisicao)} × ${coeficiente.toFixed(4)}</div>
+                        <div class="irs-stat-item">
+                            <div class="irs-stat-label">Valor Aquisição Atualizado</div>
+                            <div class="irs-stat-value">${formatCurrency(valorAquisicaoAtualizado)}</div>
+                            <div class="irs-stat-hint">${formatCurrency(valorAquisicao)} × ${coeficiente.toFixed(4)}</div>
                         </div>
-                        <div style="padding: 8px; background: ${maisValiaTotal > 0 ? '#fff3cd' : '#d4edda'}; border-radius: 4px;">
-                            <div style="color: #666;">Mais-Valia Bruta</div>
-                            <div style="font-weight: 600; color: ${maisValiaTotal > 0 ? '#856404' : '#155724'};">${formatCurrency(Math.max(0, maisValiaTotal))}</div>
-                            <div style="color: #999; font-size: 0.8em;">${formatCurrency(salePrice)} − ${formatCurrency(valorAquisicaoAtualizado)} − ${formatCurrency(comissao)} (comissão)</div>
+                        <div class="irs-stat-item" style="background: ${maisValiaTotal > 0 ? '#fff3cd' : '#d4edda'};">
+                            <div class="irs-stat-label">Mais-Valia Bruta</div>
+                            <div class="irs-stat-value" style="color: ${maisValiaTotal > 0 ? '#856404' : '#155724'};">${formatCurrency(Math.max(0, maisValiaTotal))}</div>
+                            <div class="irs-stat-hint">${formatCurrency(salePrice)} − ${formatCurrency(valorAquisicaoAtualizado)} − ${formatCurrency(comissao)} (comissão)</div>
                         </div>
                     </div>
                     
                     ${maisValiaTotal > 0 ? `
-                    <div style="margin-top: 15px; padding: 15px; background: ${isHPP ? (reinvestmentRatio >= 1 ? '#e8f5e9' : '#fff8e1') : '#fff8e1'}; border-radius: 6px; border: 1px solid ${isHPP ? (reinvestmentRatio >= 1 ? '#a5d6a7' : '#ffe082') : '#ffe082'};">
-                        <div style="font-weight: 600; margin-bottom: 10px; color: ${isHPP ? (reinvestmentRatio >= 1 ? '#2e7d32' : '#f57f17') : '#f57f17'};">📊 Cálculo IRS — Mais-Valias</div>
-                        <div style="display: grid; gap: 6px; font-size: 0.88em;">
+                    <div class="irs-calc-box" style="background: ${isHPP ? (reinvestmentRatio >= 1 ? '#e8f5e9' : '#fff8e1') : '#fff8e1'}; border-color: ${isHPP ? (reinvestmentRatio >= 1 ? '#a5d6a7' : '#ffe082') : '#ffe082'};">
+                        <div class="irs-calc-title" style="color: ${isHPP ? (reinvestmentRatio >= 1 ? '#2e7d32' : '#f57f17') : '#f57f17'};">📊 Cálculo IRS — Mais-Valias</div>
+                        <div class="irs-calc-grid">
                             <div style="display: flex; justify-content: space-between;">
                                 <span>Preço de venda</span>
                                 <span style="font-weight: 600;">${formatCurrency(salePrice)}</span>
@@ -676,14 +676,14 @@ function renderIRSSection() {
                         </div>
                     </div>
                     ` : `
-                    <div style="margin-top: 15px; padding: 12px; background: #d4edda; border-radius: 6px; color: #155724; font-size: 0.9em;">
+                    <div class="irs-no-gains-box">
                         ✅ Sem mais-valias tributáveis — valor de venda (${formatCurrency(salePrice)}) ≤ valor de aquisição atualizado (${formatCurrency(valorAquisicaoAtualizado)}).
                     </div>
                     `}
                     
-                    <div style="margin-top: 15px; padding: 15px; background: #e8f5e9; border-radius: 6px; border: 1px solid #a5d6a7;">
-                        <div style="font-weight: 600; margin-bottom: 8px; color: #2e7d32;">💰 Resumo de Custos da Venda</div>
-                        <div style="display: grid; gap: 4px; font-size: 0.88em;">
+                    <div class="irs-sale-summary">
+                        <div class="irs-sale-summary-title">💰 Resumo de Custos da Venda</div>
+                        <div class="irs-sale-summary-grid">
                             <div style="display: flex; justify-content: space-between;">
                                 <span>Comissão: ${formatCurrency(salePrice)} × ${comissaoPercent}% × 1,23 (IVA)</span>
                                 <span>${formatCurrency(comissao)}</span>
@@ -735,15 +735,15 @@ function renderIRSSection() {
         }, 0);
         
         return `
-            <div style="background: #fafafa; padding: 25px; border-radius: 10px; margin-bottom: 20px; border: 1px solid #e0e0e0;">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <div class="irs-buyer-card">
+                <div class="irs-buyer-header">
                     <div>
-                        <div style="font-weight: 700; font-size: 1.15em; color: #333;">${buyer.name}</div>
-                        <div style="color: #666; font-size: 0.9em;">Taxa marginal: ${(irsRate * 100).toFixed(1)}%</div>
+                        <div class="irs-buyer-name">${buyer.name}</div>
+                        <div class="irs-buyer-rate">Taxa marginal: ${(irsRate * 100).toFixed(1)}%</div>
                     </div>
-                    <div style="text-align: right;">
-                        <div style="font-size: 0.85em; color: #666;">Total IRS (mais-valias)</div>
-                        <div style="font-size: 1.4em; font-weight: 700; color: ${totalImposto > 0 ? '#e65100' : '#2e7d32'};">${formatCurrency(totalImposto)}</div>
+                    <div class="irs-buyer-total">
+                        <div class="irs-buyer-total-label">Total IRS (mais-valias)</div>
+                        <div class="irs-buyer-total-value" style="color: ${totalImposto > 0 ? '#e65100' : '#2e7d32'};">${formatCurrency(totalImposto)}</div>
                     </div>
                 </div>
                 ${housesHtml}

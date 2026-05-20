@@ -1306,3 +1306,518 @@ table td:first-child {
         grid-template-columns: 1fr;
     }
 }
+
+/* ========================================
+   Extracted inline styles → CSS classes 
+   ======================================== */
+
+/* Header actions */
+.header-actions {
+    margin-top: 15px;
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.header-btn {
+    padding: 8px 16px;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9em;
+    min-height: 44px;
+}
+
+.header-btn-save { background: #28a745; }
+.header-btn-load { background: #667eea; }
+.hidden-input { display: none; }
+
+/* Section titles */
+.section-title {
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.section-subtitle {
+    color: #666;
+    margin-bottom: 25px;
+}
+
+.subsection-title {
+    margin-top: 30px;
+}
+
+/* Form utilities */
+.down-payment-display {
+    font-size: 1.4em;
+    font-weight: 700;
+    color: #667eea;
+    padding: 10px 0;
+}
+
+.checkbox-group {
+    margin-top: 10px;
+}
+
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+}
+
+.checkbox-label-sm {
+    font-size: 0.85em;
+    font-weight: 500;
+    color: #333;
+}
+
+.checkbox-input {
+    width: auto;
+}
+
+/* Formula spacing */
+.formula-spacing { margin-bottom: 15px; }
+.formula-spacing-sm { margin-bottom: 10px; }
+.formula-spacing-none { margin-bottom: 0; }
+.formula-heading {
+    margin-bottom: 10px;
+    font-weight: 600;
+    color: #333;
+}
+
+/* Buyers container */
+.buyers-container {
+    margin-bottom: 30px;
+}
+
+.money-pool-hidden {
+    display: none;
+    margin-top: 40px;
+}
+
+/* Empty state */
+.empty-state {
+    color: #999;
+    font-style: italic;
+    padding: 20px;
+}
+
+/* Buyer card extras */
+.buyer-name-input {
+    border: 1px solid #ccc;
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-weight: 700;
+    font-size: 1.1em;
+}
+
+.buyer-card-subtitle {
+    color: #999;
+    font-size: 0.9em;
+    margin-top: 5px;
+}
+
+/* Houses to sell section */
+.houses-sell-section {
+    background: #e8f4f8;
+    padding: 15px;
+    border-radius: 6px;
+    margin-top: 15px;
+}
+
+.houses-sell-title {
+    font-weight: 600;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.houses-sell-list {
+    margin-bottom: 10px;
+}
+
+.add-house-btn-blue {
+    background: #4facfe;
+    margin-top: 10px;
+}
+
+/* House sell card */
+.house-sell-card {
+    background: white;
+    padding: 12px;
+    border-radius: 6px;
+    margin-bottom: 10px;
+    border: 1px solid #e0e0e0;
+}
+
+.house-sell-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.house-sell-card-title {
+    font-weight: 600;
+    color: #333;
+}
+
+.remove-house-btn-sm {
+    padding: 4px 10px;
+    font-size: 0.8em;
+}
+
+.house-sell-checkbox-group {
+    margin-bottom: 10px;
+}
+
+.house-sell-costs-summary {
+    font-size: 0.8em;
+    color: #666;
+    margin-top: 8px;
+    padding: 10px;
+    background: #f8f8f8;
+    border-radius: 4px;
+}
+
+.house-sell-costs-title {
+    font-weight: 600;
+    margin-bottom: 6px;
+    color: #555;
+}
+
+.house-sell-net {
+    font-size: 0.9em;
+    color: #333;
+    margin-top: 8px;
+    font-weight: 600;
+}
+
+.text-success {
+    color: #28a745;
+}
+
+/* ========================================
+   IRS Section (deeply nested — minimal padding) 
+   ======================================== */
+
+.irs-buyer-card {
+    background: #fafafa;
+    padding: 25px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #e0e0e0;
+}
+
+.irs-buyer-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.irs-buyer-name {
+    font-weight: 700;
+    font-size: 1.15em;
+    color: #333;
+}
+
+.irs-buyer-rate {
+    color: #666;
+    font-size: 0.9em;
+}
+
+.irs-buyer-total {
+    text-align: right;
+}
+
+.irs-buyer-total-label {
+    font-size: 0.85em;
+    color: #666;
+}
+
+.irs-buyer-total-value {
+    font-size: 1.4em;
+    font-weight: 700;
+}
+
+.irs-house-card {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    border-left: 4px solid;
+}
+
+.irs-house-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.irs-house-title {
+    font-weight: 700;
+    color: #333;
+}
+
+.irs-house-badge {
+    font-size: 0.8em;
+    padding: 3px 8px;
+    border-radius: 4px;
+}
+
+.irs-stats-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    font-size: 0.9em;
+}
+
+.irs-stat-item {
+    padding: 8px;
+    background: #f8f9fa;
+    border-radius: 4px;
+}
+
+.irs-stat-label {
+    color: #666;
+}
+
+.irs-stat-value {
+    font-weight: 600;
+}
+
+.irs-stat-hint {
+    color: #999;
+    font-size: 0.8em;
+}
+
+.irs-calc-box {
+    margin-top: 15px;
+    padding: 15px;
+    border-radius: 6px;
+    border: 1px solid;
+}
+
+.irs-calc-title {
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+.irs-calc-grid {
+    display: grid;
+    gap: 6px;
+    font-size: 0.88em;
+}
+
+.irs-no-gains-box {
+    margin-top: 15px;
+    padding: 12px;
+    background: #d4edda;
+    border-radius: 6px;
+    color: #155724;
+    font-size: 0.9em;
+}
+
+.irs-sale-summary {
+    margin-top: 15px;
+    padding: 15px;
+    background: #e8f5e9;
+    border-radius: 6px;
+    border: 1px solid #a5d6a7;
+}
+
+.irs-sale-summary-title {
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: #2e7d32;
+}
+
+.irs-sale-summary-grid {
+    display: grid;
+    gap: 4px;
+    font-size: 0.88em;
+}
+
+/* ========================================
+   Mobile overrides for extracted classes 
+   ======================================== */
+
+@media (max-width: 768px) {
+    .section-title {
+        font-size: 1.2em;
+        margin-bottom: 15px;
+    }
+    
+    .section-subtitle {
+        margin-bottom: 15px;
+        font-size: 0.9em;
+    }
+    
+    .subsection-title {
+        margin-top: 20px;
+        font-size: 1.1em;
+    }
+    
+    .irs-buyer-card {
+        padding: 15px;
+    }
+    
+    .irs-house-card {
+        padding: 12px;
+    }
+    
+    .irs-house-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+    
+    .irs-calc-box {
+        padding: 12px;
+    }
+    
+    .irs-sale-summary {
+        padding: 12px;
+    }
+    
+    .houses-sell-section {
+        padding: 12px;
+    }
+    
+    .house-sell-card {
+        padding: 10px;
+    }
+    
+    .house-sell-costs-summary {
+        padding: 8px;
+    }
+    
+    .buyer-card {
+        padding: 15px;
+    }
+    
+    .down-payment-display {
+        font-size: 1.2em;
+    }
+}
+
+@media (max-width: 480px) {
+    .section-title {
+        font-size: 1.05em;
+        margin-bottom: 12px;
+    }
+    
+    .section-subtitle {
+        margin-bottom: 12px;
+        font-size: 0.85em;
+    }
+    
+    .subsection-title {
+        margin-top: 15px;
+        font-size: 1em;
+    }
+    
+    /* Aggressively reduce nested padding */
+    .irs-buyer-card {
+        padding: 10px;
+        border-radius: 8px;
+    }
+    
+    .irs-house-card {
+        padding: 8px;
+        border-radius: 6px;
+    }
+    
+    .irs-stats-grid {
+        grid-template-columns: 1fr;
+        gap: 6px;
+    }
+    
+    .irs-stat-item {
+        padding: 6px;
+    }
+    
+    .irs-calc-box {
+        padding: 8px;
+        margin-top: 10px;
+    }
+    
+    .irs-calc-grid {
+        font-size: 0.82em;
+    }
+    
+    .irs-sale-summary {
+        padding: 8px;
+        margin-top: 10px;
+    }
+    
+    .irs-sale-summary-grid {
+        font-size: 0.82em;
+    }
+    
+    .irs-no-gains-box {
+        padding: 8px;
+        font-size: 0.85em;
+    }
+    
+    .irs-buyer-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+        margin-bottom: 12px;
+    }
+    
+    .irs-buyer-total {
+        text-align: left;
+    }
+    
+    .irs-buyer-total-value {
+        font-size: 1.2em;
+    }
+    
+    .houses-sell-section {
+        padding: 8px;
+        margin-top: 10px;
+    }
+    
+    .house-sell-card {
+        padding: 8px;
+    }
+    
+    .house-sell-costs-summary {
+        padding: 6px;
+        font-size: 0.75em;
+    }
+    
+    .house-sell-net {
+        font-size: 0.85em;
+    }
+    
+    .buyer-card {
+        padding: 12px;
+    }
+    
+    .buyer-name-input {
+        font-size: 1em;
+        padding: 4px 8px;
+        max-width: 100%;
+    }
+    
+    .header-btn {
+        padding: 8px 12px;
+        font-size: 0.85em;
+    }
+    
+    .down-payment-display {
+        font-size: 1.1em;
+    }
+    
+    .empty-state {
+        padding: 15px;
+        font-size: 0.9em;
+    }
+}

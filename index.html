@@ -14,25 +14,25 @@
         <div class="header">
             <h1>🏠 Calculadora de Compra de Casa</h1>
             <p>Simula todos os custos associados à compra de habitação em Portugal</p>
-            <div style="margin-top: 15px; display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
-                <button onclick="saveSimulation()" style="padding: 8px 16px; background: #28a745; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 0.9em;">💾 Guardar Simulação</button>
-                <button onclick="document.getElementById('loadFileInput').click()" style="padding: 8px 16px; background: #667eea; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 0.9em;">📂 Carregar Simulação</button>
-                <input type="file" id="loadFileInput" accept=".json" style="display: none;" onchange="loadSimulation(event)">
+            <div class="header-actions">
+                <button onclick="saveSimulation()" class="header-btn header-btn-save">💾 Guardar Simulação</button>
+                <button onclick="document.getElementById('loadFileInput').click()" class="header-btn header-btn-load">📂 Carregar Simulação</button>
+                <input type="file" id="loadFileInput" accept=".json" class="hidden-input" onchange="loadSimulation(event)">
             </div>
         </div>
         
         <!-- SECÇÃO COMPRADORES -->
         <div class="page-section section-buyers">
-            <h2 style="margin-bottom: 20px; color: #333;">👥 Passo 0: Configurar Compradores</h2>
-            <p style="color: #666; margin-bottom: 25px;">Adicione cada comprador com os seus dados financeiros</p>
+            <h2 class="section-title">👥 Passo 0: Configurar Compradores</h2>
+            <p class="section-subtitle">Adicione cada comprador com os seus dados financeiros</p>
             
-            <div id="buyersContainer" style="margin-bottom: 30px;">
+            <div id="buyersContainer" class="buyers-container">
             </div>
             
             <button class="add-house-btn" onclick="addBuyer()">+ Adicionar Comprador</button>
             
             <!-- Resumo do Pool -->
-            <div class="money-pool-section" id="moneyPoolSection" style="display: none; margin-top: 40px;">
+            <div class="money-pool-section money-pool-hidden" id="moneyPoolSection">
                 <div class="pool-title">💰 Fundo Conjunto</div>
                 <div class="pool-value" id="poolTotalValue">0 €</div>
                 <div class="pool-breakdown">
@@ -54,8 +54,8 @@
         
         <!-- SECÇÃO COMPRA -->
         <div class="page-section section-bordered">
-            <h2 style="margin-bottom: 20px; color: #333;">🏠 Passo 1: Dados do Imóvel a Comprar</h2>
-            <p style="color: #666; margin-bottom: 25px;">Insira os dados da casa que pretendem comprar</p>
+            <h2 class="section-title">🏠 Passo 1: Dados do Imóvel a Comprar</h2>
+            <p class="section-subtitle">Insira os dados da casa que pretendem comprar</p>
         
             <div class="main-content">
                 <!-- Secção de Inputs -->
@@ -70,19 +70,19 @@
                 
                 <div class="input-group">
                     <label>Entrada / Capitais Próprios (€) <span class="tooltip-icon" data-tooltip="Montante efetivo para entrada no imóvel — contribuições dos compradores menos custos de escritura (IMT, Selo, Registo).">?</span></label>
-                    <div id="downPaymentDisplay" style="font-size: 1.4em; font-weight: 700; color: #667eea; padding: 10px 0;">0 €</div>
+                    <div id="downPaymentDisplay" class="down-payment-display">0 €</div>
                     <div class="input-helper">Contribuições − impostos e custos = entrada efetiva (mín. 10%)</div>
                 </div>
                 
-                <div class="input-group" style="margin-top: 10px;">
-                    <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
-                        <input type="checkbox" id="isPermanentResidence" checked style="width: auto;">
+                <div class="input-group checkbox-group">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="isPermanentResidence" checked class="checkbox-input">
                         Habitação Própria Permanente (HPP)
                         <span class="tooltip-icon" data-tooltip="Se for HPP, paga menos IMT. Se for segunda habitação ou investimento, as taxas são mais altas.">?</span>
                     </label>
                 </div>
                 
-                <h2 style="margin-top: 30px;">Crédito Habitação</h2>
+                <h2 class="subsection-title">Crédito Habitação</h2>
                 
                 <div class="input-row">
                     <div class="input-group">
@@ -98,7 +98,7 @@
                     </div>
                 </div>
                 
-                <h2 style="margin-top: 30px;">IMI e Seguros</h2>
+                <h2 class="subsection-title">IMI e Seguros</h2>
                 
                 <div class="input-row">
                     <div class="input-group">
@@ -140,17 +140,17 @@
                         <span class="result-label">Montante do Crédito:</span>
                         <span class="result-value" id="loanAmount">0 €</span>
                     </div>
-                    <div id="formulaLoanAmount" class="formula-breakdown" style="margin-bottom: 15px;"></div>
+                    <div id="formulaLoanAmount" class="formula-breakdown formula-spacing"></div>
                     <div class="result-item">
                         <span class="result-label">Prestação Mensal:</span>
                         <span class="result-value" id="monthlyMortgage">0 €</span>
                     </div>
-                    <div id="formulaMortgage" class="formula-breakdown" style="margin-bottom: 15px;"></div>
+                    <div id="formulaMortgage" class="formula-breakdown formula-spacing"></div>
                     <div class="result-item">
                         <span class="result-label">IMI Mensal:</span>
                         <span class="result-value" id="monthlyIMI">0 €</span>
                     </div>
-                    <div id="formulaIMI" class="formula-breakdown" style="margin-bottom: 15px;"></div>
+                    <div id="formulaIMI" class="formula-breakdown formula-spacing"></div>
                     <div class="result-item">
                         <span class="result-label">Seguro Vida:</span>
                         <span class="result-value" id="monthlySeguroVida">0 €</span>
@@ -163,7 +163,7 @@
                         <span class="result-label">Total Mensal:</span>
                         <span class="result-value" id="totalMonthly">0 €</span>
                     </div>
-                    <div id="formulaTotalMonthly" class="formula-breakdown" style="margin-bottom: 0;"></div>
+                    <div id="formulaTotalMonthly" class="formula-breakdown formula-spacing-none"></div>
                 </div>
                 
                 <div class="breakdown-section">
@@ -176,12 +176,12 @@
                         <span>IMT:</span>
                         <span class="breakdown-value" id="breakdownIMT">0 €</span>
                     </div>
-                    <div id="formulaIMT" class="formula-breakdown" style="margin-bottom: 10px;"></div>
+                    <div id="formulaIMT" class="formula-breakdown formula-spacing-sm"></div>
                     <div class="breakdown-item">
                         <span>Imposto de Selo (escritura + crédito):</span>
                         <span class="breakdown-value" id="breakdownIS">0 €</span>
                     </div>
-                    <div id="formulaIS" class="formula-breakdown" style="margin-bottom: 10px;"></div>
+                    <div id="formulaIS" class="formula-breakdown formula-spacing-sm"></div>
                     <div class="breakdown-item">
                         <span>Registo e Escritura:</span>
                         <span class="breakdown-value" id="breakdownRegisto">0 €</span>
@@ -190,7 +190,7 @@
                         <span><strong>Total Investimento Inicial (= contribuições):</strong></span>
                         <span class="breakdown-value" id="breakdownUpfront"><strong>0 €</strong></span>
                     </div>
-                    <div id="formulaUpfront" class="formula-breakdown" style="margin-bottom: 0;"></div>
+                    <div id="formulaUpfront" class="formula-breakdown formula-spacing-none"></div>
                 </div>
                 
                 <div class="breakdown-section">
@@ -204,7 +204,7 @@
                         <span class="breakdown-value" id="totalPaid">0 €</span>
                     </div>
                     <div id="interestFormula" class="formula-breakdown">
-                        <div style="margin-bottom: 10px; font-weight: 600; color: #333;">Como é calculado:</div>
+                        <div class="formula-heading">Como é calculado:</div>
                         <div class="formula-item">
                             <span>Prestação Mensal:</span>
                             <span id="formulaMonthlyPayment">0 €</span>
@@ -244,14 +244,14 @@
         
         <!-- Secção IRS / Mais-Valias -->
         <div class="page-section section-bordered">
-            <h2 style="margin-bottom: 10px; color: #333;">📋 Impacto no IRS — Mais-Valias</h2>
-            <p style="color: #666; margin-bottom: 25px;">Cálculo detalhado do imposto sobre mais-valias por comprador (aplicável na venda de imóveis)</p>
+            <h2 class="section-title">📋 Impacto no IRS — Mais-Valias</h2>
+            <p class="section-subtitle">Cálculo detalhado do imposto sobre mais-valias por comprador (aplicável na venda de imóveis)</p>
             <div id="irsSection"></div>
         </div>
         
         <!-- Tabela de Amortização -->
         <div class="page-section section-bordered-light">
-            <h2 style="margin-bottom: 20px; color: #333;">Mapa de Amortização</h2>
+            <h2 class="section-title">Mapa de Amortização</h2>
             
             <div class="tabs">
                 <button class="tab-btn active" onclick="switchTab('tab-yearly')">Resumo Anual</button>
@@ -297,7 +297,7 @@
         
         <!-- Gráficos -->
         <div class="page-section section-bordered-light">
-            <h2 style="margin-bottom: 30px; color: #333;">📊 Visualizações</h2>
+            <h2 class="section-title">📊 Visualizações</h2>
             
             <div class="charts-grid">
                 <div class="chart-container">
