@@ -891,7 +891,6 @@ function updateCalculations() {
     updateCharts(loanAmount, interestRate, loanTerm, totalInterest, monthlyMortgage, monthlyIMI, monthlySeguroVida, monthlySeguroMultirriscos);
     updateAmortizationTables(loanAmount, interestRate, loanTerm);
     renderIRSSection();
-    renderCashFlowDiagram(totalInvestment, entrada, imt, impostoSeloEscritura + impostoSeloCredito, registoEscritura, loanAmount, homePrice, monthlyMortgage, monthlyIMI, monthlySeguroVida, monthlySeguroMultirriscos);
 }
 
 function updateCharts(loanAmount, interestRate, loanTerm, totalInterest, monthlyMortgage, monthlyIMI, monthlySeguroVida, monthlySeguroMultirriscos) {
@@ -1152,124 +1151,6 @@ function initCalculator() {
     updateCalculations();
 }
 
-function renderCashFlowDiagram(totalInvestment, entrada, imt, impostoSelo, registo, loanAmount, homePrice, monthlyMortgage, monthlyIMI, monthlySeguroVida, monthlySeguroMultirriscos) {
-    const container = document.getElementById('cashFlowDiagram');
-    if (!container) return;
-    
-    const totalMonthly = monthlyMortgage + monthlyIMI + monthlySeguroVida + monthlySeguroMultirriscos;
-    
-    // Buyer sources
-    const buyerSources = buyers.map(buyer => {
-        const startingCash = parseFloat(buyer.startingCash) || 0;
-        const houseProceeds = calculateBuyerHouseProceeds(buyer);
-        const contribution = parseFloat(buyer.contributionAmount) || 0;
-        return { name: buyer.name, startingCash, houseProceeds, contribution };
-    });
-    
-    container.innerHTML = `
-        <div style="display: flex; flex-direction: column; gap: 0; font-size: 0.9em;">
-            
-            <!-- SOURCES -->
-            <div style="background: #e8f5e9; border: 2px solid #4caf50; border-radius: 10px; padding: 25px;">
-                <div style="font-weight: 700; font-size: 1.1em; color: #2e7d32; margin-bottom: 15px; text-align: center;">📥 ENTRADAS DE DINHEIRO</div>
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
-                    ${buyerSources.map(s => `
-                        <div style="background: white; padding: 12px; border-radius: 6px; border-left: 3px solid #4caf50;">
-                            <div style="font-weight: 600; margin-bottom: 5px;">${s.name}</div>
-                            <div style="font-size: 0.85em; color: #666;">Poupanças: ${formatCurrency(s.startingCash)}</div>
-                            ${s.houseProceeds > 0 ? `<div style="font-size: 0.85em; color: #666;">Venda imóveis: ${formatCurrency(s.houseProceeds)}</div>` : ''}
-                            <div style="font-weight: 600; color: #2e7d32; margin-top: 5px;">Contribui: ${formatCurrency(s.contribution)}</div>
-                        </div>
-                    `).join('')}
-                    ${loanAmount > 0 ? `
-                    <div style="background: white; padding: 12px; border-radius: 6px; border-left: 3px solid #1565c0;">
-                        <div style="font-weight: 600; margin-bottom: 5px;">🏦 Banco</div>
-                        <div style="font-size: 0.85em; color: #666;">Crédito Habitação</div>
-                        <div style="font-weight: 600; color: #1565c0; margin-top: 5px;">${formatCurrency(loanAmount)}</div>
-                    </div>
-                    ` : ''}
-                </div>
-                <div style="text-align: center; margin-top: 15px; font-weight: 700; font-size: 1.2em; color: #1b5e20;">
-                    Total: ${formatCurrency(totalInvestment + loanAmount)}
-                </div>
-            </div>
-            
-            <!-- ARROW DOWN -->
-            <div style="text-align: center; font-size: 2em; color: #666; line-height: 1;">▼</div>
-            
-            <!-- TRANSACTION -->
-            <div style="background: #fff3e0; border: 2px solid #ff9800; border-radius: 10px; padding: 25px;">
-                <div style="font-weight: 700; font-size: 1.1em; color: #e65100; margin-bottom: 15px; text-align: center;">🔄 TRANSAÇÃO (DIA DA ESCRITURA)</div>
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
-                    <div>
-                        <div style="font-weight: 600; margin-bottom: 10px; color: #333;">Capitais Próprios (${formatCurrency(totalInvestment)})</div>
-                        <div style="display: grid; gap: 6px; font-size: 0.88em;">
-                            <div style="display: flex; justify-content: space-between; padding: 6px 10px; background: #fff8e1; border-radius: 4px;">
-                                <span>→ Entrada no imóvel</span>
-                                <span style="font-weight: 600;">${formatCurrency(entrada)}</span>
-                            </div>
-                            <div style="display: flex; justify-content: space-between; padding: 6px 10px; background: #ffebee; border-radius: 4px;">
-                                <span>→ IMT</span>
-                                <span style="font-weight: 600;">${formatCurrency(imt)}</span>
-                            </div>
-                            <div style="display: flex; justify-content: space-between; padding: 6px 10px; background: #ffebee; border-radius: 4px;">
-                                <span>→ Imposto de Selo</span>
-                                <span style="font-weight: 600;">${formatCurrency(impostoSelo)}</span>
-                            </div>
-                            <div style="display: flex; justify-content: space-between; padding: 6px 10px; background: #ffebee; border-radius: 4px;">
-                                <span>→ Registo e Escritura</span>
-                                <span style="font-weight: 600;">${formatCurrency(registo)}</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div>
-                        <div style="font-weight: 600; margin-bottom: 10px; color: #333;">Crédito Banco (${formatCurrency(loanAmount)})</div>
-                        <div style="display: grid; gap: 6px; font-size: 0.88em;">
-                            <div style="display: flex; justify-content: space-between; padding: 6px 10px; background: #e3f2fd; border-radius: 4px;">
-                                <span>→ Restante do imóvel</span>
-                                <span style="font-weight: 600;">${formatCurrency(loanAmount)}</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div style="text-align: center; margin-top: 15px; padding: 10px; background: #fff; border-radius: 6px; border: 2px dashed #ff9800;">
-                    <div style="font-size: 0.85em; color: #666;">Valor do Imóvel</div>
-                    <div style="font-size: 1.5em; font-weight: 700; color: #e65100;">${formatCurrency(homePrice)}</div>
-                    <div style="font-size: 0.8em; color: #999;">${formatCurrency(entrada)} (entrada) + ${formatCurrency(loanAmount)} (crédito)</div>
-                </div>
-            </div>
-            
-            <!-- ARROW DOWN -->
-            <div style="text-align: center; font-size: 2em; color: #666; line-height: 1;">▼</div>
-            
-            <!-- ONGOING COSTS -->
-            <div style="background: #fce4ec; border: 2px solid #e91e63; border-radius: 10px; padding: 25px;">
-                <div style="font-weight: 700; font-size: 1.1em; color: #880e4f; margin-bottom: 15px; text-align: center;">📤 CUSTOS MENSAIS RECORRENTES</div>
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px;">
-                    <div style="background: white; padding: 12px; border-radius: 6px; text-align: center;">
-                        <div style="font-size: 0.8em; color: #666;">Prestação</div>
-                        <div style="font-weight: 700; color: #c62828; font-size: 1.1em;">${formatCurrency(monthlyMortgage)}</div>
-                    </div>
-                    <div style="background: white; padding: 12px; border-radius: 6px; text-align: center;">
-                        <div style="font-size: 0.8em; color: #666;">IMI</div>
-                        <div style="font-weight: 700; color: #c62828; font-size: 1.1em;">${formatCurrency(monthlyIMI)}</div>
-                    </div>
-                    <div style="background: white; padding: 12px; border-radius: 6px; text-align: center;">
-                        <div style="font-size: 0.8em; color: #666;">Seguro Vida</div>
-                        <div style="font-weight: 700; color: #c62828; font-size: 1.1em;">${formatCurrency(monthlySeguroVida)}</div>
-                    </div>
-                    <div style="background: white; padding: 12px; border-radius: 6px; text-align: center;">
-                        <div style="font-size: 0.8em; color: #666;">Seguro Multirriscos</div>
-                        <div style="font-weight: 700; color: #c62828; font-size: 1.1em;">${formatCurrency(monthlySeguroMultirriscos)}</div>
-                    </div>
-                </div>
-                <div style="text-align: center; margin-top: 15px; font-weight: 700; font-size: 1.2em; color: #880e4f;">
-                    Total Mensal: ${formatCurrency(totalMonthly)}
-                </div>
-            </div>
-        </div>
-    `;
-}
 
 function saveSimulation() {
     const inputs = {
