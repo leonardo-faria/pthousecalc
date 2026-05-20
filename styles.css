@@ -88,6 +88,11 @@ body {
     .input-row {
         grid-template-columns: 1fr;
         gap: 12px;
+        display: grid;
+    }
+    
+    .input-group {
+        margin-bottom: 12px;
     }
     
     .input-group {
@@ -97,6 +102,7 @@ body {
     .input-group label {
         font-size: 0.9em;
         margin-bottom: 6px;
+        min-height: auto;
     }
     
     .input-group input {
@@ -256,7 +262,13 @@ body {
     }
     
     .selling-summary-box {
-        padding: 20px 15px;
+        padding: 15px 12px;
+        margin-bottom: 12px;
+    }
+    
+    .results-box {
+        padding: 15px 12px;
+        margin-bottom: 12px;
     }
     
     .reset-btn {
@@ -434,6 +446,11 @@ body {
         font-size: 1em;
     }
     
+    .contribution-input {
+        padding: 10px;
+        font-size: 16px;
+    }
+    
     .cash-in-hand-box {
         padding: 15px 12px;
         margin-bottom: 15px;
@@ -534,6 +551,38 @@ body {
     }
 }
 
+/* Extra small devices - aggressive padding reduction */
+@media (max-width: 360px) {
+    body {
+        padding: 5px;
+    }
+    
+    .main-content {
+        padding: 12px 10px;
+    }
+    
+    .header {
+        padding: 15px 10px;
+    }
+    
+    .results-box,
+    .breakdown-section,
+    .selling-summary-box,
+    .house-card,
+    .buyer-card {
+        padding: 12px 10px;
+    }
+    
+    .impact-section {
+        padding: 10px;
+    }
+    
+    .input-group,
+    .input-row {
+        margin-bottom: 10px;
+    }
+}
+
 .input-section h2,
 .results-section h2 {
     font-size: 1.5em;
@@ -545,12 +594,20 @@ body {
     margin-bottom: 20px;
 }
 
+.input-group {
+    display: flex;
+    flex-direction: column;
+}
+
 .input-group label {
     display: block;
     font-weight: 600;
     margin-bottom: 8px;
     color: #555;
     font-size: 0.95em;
+    min-height: 2.4em;
+    display: flex;
+    align-items: flex-start;
 }
 
 .input-row {
@@ -566,6 +623,11 @@ body {
     border-radius: 6px;
     font-size: 1em;
     transition: border-color 0.3s;
+    order: 2;
+}
+
+.input-helper {
+    order: 3;
 }
 
 .input-group input:focus {
