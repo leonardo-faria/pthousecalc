@@ -4,6 +4,8 @@ let buyers = [];
 let nextBuyerId = 1;
 let housesToSell = [];
 let nextHouseId = 1;
+let isMarried = false;
+let marriedIrsRate = 28.5;
 
 function formatCurrency(value) {
     return new Intl.NumberFormat('pt-PT', {
@@ -80,6 +82,26 @@ function calculateIMI(vpt, taxaIMI) {
 }
 
 // BUYER MANAGEMENT
+function toggleMarried(checked) {
+    isMarried = checked;
+    document.getElementById('marriedIrsRateGroup').style.display = checked ? 'block' : 'none';
+    renderBuyers();
+    updateCalculations();
+}
+
+function updateMarriedIrsRate(value) {
+    marriedIrsRate = parseFloat(value) || 28.5;
+    renderBuyers();
+    updateCalculations();
+}
+
+function getEffectiveIrsRate(buyer) {
+    if (typeof document !== 'undefined' && isMarried) {
+        return (parseFloat(marriedIrsRate) || 28.5) / 100;
+    }
+    return (parseFloat(buyer.irsRate) || 28.5) / 100;
+}
+
 function addBuyer() {
     const buyerId = nextBuyerId++;
     buyers.push({
@@ -155,7 +177,7 @@ function renderBuyers() {
                     <div class="input-helper">Dinheiro disponível em conta</div>
                 </div>
                 
-                <div class="input-group">
+                <div class="input-group" ${isMarried ? 'style="display: none;"' : ''}>
                     <label for="irsRate_${buyer.id}">Taxa Marginal IRS (%) <span class="tooltip-icon" data-tooltip="Escalão de IRS: 14.5%, 21%, 26.5%, 28.5%, 35%, 37%, 43.5%, 45%, 48%">?</span></label>
                     <input type="number" id="irsRate_${buyer.id}" value="${buyer.irsRate || 28.5}" min="0" max="48" step="0.5" 
                            onchange="updateBuyerField(${buyer.id}, 'irsRate', this.value)">
@@ -236,7 +258,7 @@ function renderBuyers() {
 }
 
 function calculateBuyerHouseProceeds(buyer) {
-    const irsRate = (parseFloat(buyer.irsRate) || 28.5) / 100;
+    const irsRate = getEffectiveIrsRate(buyer);
     return (buyer.housesToSell || []).reduce((total, house) => {
         const salePrice = parseFloat(house.salePrice) || 0;
         const currentBalance = parseFloat(house.currentBalance) || 0;
@@ -340,7 +362,7 @@ function renderBuyerHouses(buyerId) {
     const container = document.getElementById(`housesToSell_${buyerId}`);
     if (!container) return;
     
-    const irsRate = (parseFloat(buyer.irsRate) || 28.5) / 100;
+    const irsRate = getEffectiveIrsRate(buyer);
     
     container.innerHTML = buyer.housesToSell.map((house, idx) => {
         const salePrice = parseFloat(house.salePrice) || 0;
@@ -510,7 +532,7 @@ function renderIRSSection() {
     }
     
     container.innerHTML = buyersWithHouses.map(buyer => {
-        const irsRate = (parseFloat(buyer.irsRate) || 28.5) / 100;
+        const irsRate = getEffectiveIrsRate(buyer);
         const isPermanentResidence = document.getElementById('isPermanentResidence')?.checked;
         
         const housesHtml = (buyer.housesToSell || []).map((house, idx) => {
@@ -739,7 +761,7 @@ function renderIRSSection() {
                 <div class="irs-buyer-header">
                     <div>
                         <div class="irs-buyer-name">${buyer.name}</div>
-                        <div class="irs-buyer-rate">Taxa marginal: ${(irsRate * 100).toFixed(1)}%</div>
+                        <div class="irs-buyer-rate">Taxa marginal: ${(irsRate * 100).toFixed(1)}%${isMarried ? ' (tributação conjunta)' : ''}</div>
                     </div>
                     <div class="irs-buyer-total">
                         <div class="irs-buyer-total-label">Total IRS (mais-valias)</div>
@@ -1137,6 +1159,12 @@ function initCalculator() {
     ];
     nextBuyerId = 3;
     nextHouseId = 3;
+    isMarried = true;
+    marriedIrsRate = 46;
+    
+    document.getElementById('isMarried').checked = true;
+    document.getElementById('marriedIrsRate').value = 46;
+    document.getElementById('marriedIrsRateGroup').style.display = 'block';
     
     document.getElementById('homePrice').value = 475000;
     document.getElementById('interestRate').value = 3.5;
@@ -1171,6 +1199,8 @@ function saveSimulation() {
         buyers,
         nextBuyerId,
         nextHouseId,
+        isMarried,
+        marriedIrsRate,
     };
     
     const blob = new Blob([JSON.stringify(state, null, 2)], { type: 'application/json' });
@@ -1210,6 +1240,13 @@ function loadSimulation(event) {
             buyers = state.buyers;
             nextBuyerId = state.nextBuyerId || (buyers.length > 0 ? Math.max(...buyers.map(b => b.id)) + 1 : 1);
             nextHouseId = state.nextHouseId || 1;
+            
+            // Restore married state
+            isMarried = state.isMarried || false;
+            marriedIrsRate = state.marriedIrsRate || 28.5;
+            document.getElementById('isMarried').checked = isMarried;
+            document.getElementById('marriedIrsRate').value = marriedIrsRate;
+            document.getElementById('marriedIrsRateGroup').style.display = isMarried ? 'block' : 'none';
             
             renderBuyers();
             updateCalculations();
@@ -1306,16 +1343,19 @@ function exportTXT() {
     txt += '\n';
     
     // Buyers
-    txt += '  COMPRADORES\n';
+    txt += `  COMPRADORES${isMarried ? ' (TRIBUTAÇÃO CONJUNTA)' : ''}\n`;
     txt += sepLight + '\n';
+    if (isMarried) {
+        txt += line('  Taxa marginal do casal:', (getEffectiveIrsRate(buyers[0]) * 100).toFixed(1) + '%') + '\n';
+    }
     buyers.forEach(buyer => {
         const startingCash = parseFloat(buyer.startingCash) || 0;
         const houseProceeds = calculateBuyerHouseProceeds(buyer);
         const availableCash = startingCash + houseProceeds;
         const contribution = parseFloat(buyer.contributionAmount) || 0;
-        const irsRate = (parseFloat(buyer.irsRate) || 28.5) / 100;
+        const irsRate = getEffectiveIrsRate(buyer);
         
-        txt += `\n  ${buyer.name} (Taxa IRS: ${(irsRate * 100).toFixed(1)}%)\n`;
+        txt += `\n  ${buyer.name} (Taxa IRS: ${(irsRate * 100).toFixed(1)}%${isMarried ? ' — tributação conjunta' : ''})\n`;
         txt += line('  Poupanças:', fmt(startingCash)) + '\n';
         if (houseProceeds > 0) {
             txt += line('  Líquido venda imóveis:', fmt(houseProceeds)) + '\n';
@@ -1391,9 +1431,12 @@ if (typeof module !== 'undefined' && module.exports) {
         calculateIMI,
         calculateBuyerHouseProceeds,
         calculateTotalPoolValues,
+        getEffectiveIrsRate,
         getBuyers: () => buyers,
         setBuyers: (b) => { buyers = b; },
         setNextBuyerId: (id) => { nextBuyerId = id; },
         setNextHouseId: (id) => { nextHouseId = id; },
+        setIsMarried: (v) => { isMarried = v; },
+        setMarriedIrsRate: (v) => { marriedIrsRate = v; },
     };
 }

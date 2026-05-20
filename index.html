@@ -28,6 +28,22 @@
             <h2 class="section-title">👥 Passo 0: Configurar Compradores</h2>
             <p class="section-subtitle">Adicione cada comprador com os seus dados financeiros</p>
             
+            <div class="married-toggle">
+                <label class="checkbox-label">
+                    <input type="checkbox" id="isMarried" class="checkbox-input" onchange="toggleMarried(this.checked)">
+                    Casados / União de Facto (tributação conjunta)
+                    <span class="tooltip-icon" data-tooltip="Quando casados com tributação conjunta, ambos partilham a mesma taxa marginal de IRS. As mais-valias são tributadas à taxa do casal (quociente conjugal).">?</span>
+                </label>
+                <div id="marriedIrsRateGroup" class="married-irs-rate" style="display: none;">
+                    <label for="marriedIrsRate">Taxa Marginal IRS do Casal (%)
+                        <span class="tooltip-icon" data-tooltip="Escalão de IRS conjunto: rendimentos somados e divididos por 2 (quociente conjugal). Escalões: 13.25%, 18%, 23%, 26%, 32.75%, 37%, 43.5%, 45%, 48%">?</span>
+                    </label>
+                    <input type="number" id="marriedIrsRate" value="28.5" min="0" max="48" step="0.5" 
+                           onchange="updateMarriedIrsRate(this.value)">
+                    <div class="input-helper">Escalão conjunto do casal (Art.º 69 CIRS — quociente conjugal)</div>
+                </div>
+            </div>
+            
             <div id="buyersContainer" class="buyers-container">
             </div>
             

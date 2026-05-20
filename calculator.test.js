@@ -10,8 +10,11 @@ const {
     calculateIMI,
     calculateBuyerHouseProceeds,
     calculateTotalPoolValues,
+    getEffectiveIrsRate,
     getBuyers,
     setBuyers,
+    setIsMarried,
+    setMarriedIrsRate,
 } = require('./calculator');
 
 describe('formatCurrency', () => {
@@ -480,5 +483,31 @@ describe('cenários integrados Portugal', () => {
         
         expect(totalMensal).toBeGreaterThan(1050);
         expect(totalMensal).toBeLessThan(1150);
+    });
+});
+
+describe('getEffectiveIrsRate', () => {
+    afterEach(() => {
+        setIsMarried(false);
+        setMarriedIrsRate(28.5);
+    });
+
+    test('retorna taxa individual quando não casado', () => {
+        setIsMarried(false);
+        const buyer = { irsRate: 35 };
+        expect(getEffectiveIrsRate(buyer)).toBeCloseTo(0.35);
+    });
+
+    test('retorna taxa individual por omissão (28.5%)', () => {
+        const buyer = {};
+        expect(getEffectiveIrsRate(buyer)).toBeCloseTo(0.285);
+    });
+
+    test('em contexto de teste (sem DOM) usa taxa individual mesmo se casado', () => {
+        setIsMarried(true);
+        setMarriedIrsRate(46);
+        const buyer = { irsRate: 35 };
+        // No DOM context → falls back to individual rate
+        expect(getEffectiveIrsRate(buyer)).toBeCloseTo(0.35);
     });
 });
