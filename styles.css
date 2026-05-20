@@ -50,6 +50,490 @@ body {
     }
 }
 
+/* Tablet & Mobile Optimization */
+@media (max-width: 768px) {
+    body {
+        padding: 10px;
+    }
+    
+    .container {
+        border-radius: 8px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    }
+    
+    .header {
+        padding: 25px 20px;
+    }
+    
+    .header h1 {
+        font-size: 1.8em;
+        margin-bottom: 8px;
+    }
+    
+    .header p {
+        font-size: 0.95em;
+    }
+    
+    .main-content {
+        padding: 20px 15px;
+        gap: 15px;
+    }
+    
+    .input-section h2,
+    .results-section h2 {
+        font-size: 1.2em;
+        margin-bottom: 15px;
+    }
+    
+    .input-row {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+    
+    .input-group {
+        margin-bottom: 15px;
+    }
+    
+    .input-group label {
+        font-size: 0.9em;
+        margin-bottom: 6px;
+    }
+    
+    .input-group input {
+        padding: 10px;
+        font-size: 16px;
+    }
+    
+    .result-item {
+        font-size: 1em;
+    }
+    
+    .result-item:last-child {
+        font-size: 1.1em;
+    }
+    
+    .results-box {
+        padding: 20px 15px;
+        margin-bottom: 15px;
+    }
+    
+    .breakdown-section {
+        padding: 15px;
+        margin-bottom: 15px;
+    }
+    
+    .breakdown-title {
+        font-size: 0.95em;
+        margin-bottom: 10px;
+    }
+    
+    .chart-container {
+        height: 250px;
+        padding: 15px;
+        margin-bottom: 20px;
+    }
+    
+    .tab-btn {
+        padding: 10px 15px;
+        font-size: 0.9em;
+    }
+    
+    table {
+        font-size: 0.8em;
+    }
+    
+    table th,
+    table td {
+        padding: 8px;
+    }
+    
+    .section-divider {
+        margin: 25px 0;
+    }
+    
+    .add-house-btn {
+        padding: 11px;
+        font-size: 0.95em;
+        margin-bottom: 12px;
+    }
+    
+    .remove-house-btn {
+        padding: 10px;
+        font-size: 0.85em;
+    }
+    
+    .house-card {
+        padding: 15px;
+        margin-bottom: 15px;
+    }
+    
+    .house-card-header {
+        margin-bottom: 12px;
+        padding-bottom: 8px;
+    }
+    
+    .buyer-card {
+        padding: 20px 15px;
+        margin-bottom: 20px;
+    }
+    
+    .buyer-card-header {
+        margin-bottom: 15px;
+        padding-bottom: 12px;
+    }
+    
+    .buyer-card-title {
+        font-size: 1.1em;
+    }
+    
+    .buyer-summary-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+        padding: 12px;
+    }
+    
+    .buyer-summary-value {
+        font-size: 1.1em;
+    }
+    
+    .cash-in-hand-box {
+        padding: 20px 15px;
+        margin-bottom: 20px;
+    }
+    
+    .cash-in-hand-value {
+        font-size: 2em;
+    }
+    
+    .impact-section {
+        padding: 15px;
+        margin-top: 15px;
+    }
+    
+    .impact-title {
+        margin-bottom: 12px;
+    }
+    
+    .formula-breakdown {
+        padding: 12px;
+        font-size: 0.85em;
+        margin-top: 8px;
+    }
+    
+    .formula-item {
+        margin-bottom: 6px;
+        font-size: 0.85em;
+    }
+    
+    .money-pool-section {
+        padding: 30px 20px;
+        margin-bottom: 30px;
+    }
+    
+    .pool-title {
+        font-size: 1.05em;
+        margin-bottom: 12px;
+    }
+    
+    .pool-value {
+        font-size: 2.2em;
+        margin-bottom: 15px;
+    }
+    
+    .pool-breakdown {
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 12px;
+        margin-top: 15px;
+    }
+    
+    .pool-item {
+        padding: 12px;
+    }
+    
+    .pool-item-value {
+        font-size: 1.1em;
+        margin-top: 4px;
+    }
+    
+    .selling-summary-box {
+        padding: 20px 15px;
+    }
+    
+    .reset-btn {
+        padding: 11px;
+        font-size: 0.95em;
+        margin-top: 15px;
+    }
+}
+
+/* Small Mobile Phones */
+@media (max-width: 480px) {
+    body {
+        padding: 8px;
+    }
+    
+    .header {
+        padding: 20px 15px;
+    }
+    
+    .header h1 {
+        font-size: 1.5em;
+        margin-bottom: 6px;
+    }
+    
+    .header p {
+        font-size: 0.85em;
+    }
+    
+    .main-content {
+        padding: 15px 12px;
+        gap: 10px;
+    }
+    
+    .input-section h2,
+    .results-section h2 {
+        font-size: 1.05em;
+        margin-bottom: 12px;
+    }
+    
+    .input-row {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+    
+    .input-group {
+        margin-bottom: 12px;
+    }
+    
+    .input-group label {
+        font-size: 0.85em;
+        margin-bottom: 5px;
+    }
+    
+    .input-group input {
+        padding: 10px;
+        font-size: 16px;
+        border-radius: 4px;
+    }
+    
+    .input-helper {
+        font-size: 0.8em;
+        margin-top: 4px;
+    }
+    
+    .result-item {
+        font-size: 0.9em;
+        margin-bottom: 10px;
+    }
+    
+    .result-item:last-child {
+        font-size: 1em;
+    }
+    
+    .results-box {
+        padding: 15px 12px;
+        margin-bottom: 12px;
+    }
+    
+    .breakdown-section {
+        padding: 12px;
+        margin-bottom: 12px;
+    }
+    
+    .breakdown-title {
+        font-size: 0.9em;
+        margin-bottom: 8px;
+    }
+    
+    .breakdown-item {
+        font-size: 0.85em;
+        padding: 8px 0;
+    }
+    
+    .chart-container {
+        height: 220px;
+        padding: 12px;
+        margin-bottom: 15px;
+    }
+    
+    .tabs {
+        gap: 8px;
+        margin-bottom: 15px;
+        flex-wrap: wrap;
+    }
+    
+    .tab-btn {
+        padding: 8px 12px;
+        font-size: 0.8em;
+    }
+    
+    table {
+        font-size: 0.75em;
+    }
+    
+    table th,
+    table td {
+        padding: 6px;
+    }
+    
+    .section-divider {
+        margin: 20px 0;
+    }
+    
+    .add-house-btn,
+    .remove-house-btn {
+        font-size: 0.9em;
+        padding: 10px;
+        min-height: 44px;
+    }
+    
+    .house-card {
+        padding: 12px;
+        margin-bottom: 12px;
+    }
+    
+    .house-card-header {
+        margin-bottom: 10px;
+        padding-bottom: 8px;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+    
+    .buyer-card {
+        padding: 15px 12px;
+        margin-bottom: 15px;
+    }
+    
+    .buyer-card-header {
+        margin-bottom: 12px;
+        padding-bottom: 10px;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+    
+    .buyer-card-title {
+        font-size: 1em;
+    }
+    
+    .buyer-summary-grid {
+        grid-template-columns: 1fr;
+        gap: 10px;
+        padding: 10px;
+    }
+    
+    .buyer-summary-item {
+        text-align: left;
+        padding: 8px;
+        background: #f5f5f5;
+        border-radius: 4px;
+    }
+    
+    .buyer-summary-value {
+        font-size: 1em;
+    }
+    
+    .cash-in-hand-box {
+        padding: 15px 12px;
+        margin-bottom: 15px;
+    }
+    
+    .cash-in-hand-label {
+        font-size: 0.9em;
+        margin-bottom: 8px;
+    }
+    
+    .cash-in-hand-value {
+        font-size: 1.7em;
+    }
+    
+    .impact-section {
+        padding: 12px;
+        margin-top: 12px;
+    }
+    
+    .impact-title {
+        font-size: 0.95em;
+        margin-bottom: 10px;
+    }
+    
+    .impact-item {
+        font-size: 0.85em;
+        padding: 8px 0;
+    }
+    
+    .formula-breakdown {
+        padding: 10px;
+        font-size: 0.8em;
+        margin-top: 6px;
+    }
+    
+    .formula-item {
+        margin-bottom: 5px;
+        font-size: 0.75em;
+    }
+    
+    .money-pool-section {
+        padding: 20px 15px;
+        margin-bottom: 20px;
+    }
+    
+    .pool-title {
+        font-size: 0.95em;
+        margin-bottom: 10px;
+    }
+    
+    .pool-value {
+        font-size: 1.8em;
+        margin-bottom: 12px;
+    }
+    
+    .pool-breakdown {
+        grid-template-columns: 1fr;
+        gap: 10px;
+        margin-top: 12px;
+    }
+    
+    .pool-item {
+        padding: 10px;
+    }
+    
+    .pool-item-label {
+        font-size: 0.8em;
+    }
+    
+    .pool-item-value {
+        font-size: 1em;
+        margin-top: 4px;
+    }
+    
+    .selling-summary-box {
+        padding: 15px 12px;
+        margin-bottom: 15px;
+    }
+    
+    .remove-buyer-btn {
+        padding: 8px 12px;
+        font-size: 0.85em;
+        min-height: 44px;
+    }
+    
+    .reset-btn {
+        padding: 11px;
+        font-size: 0.9em;
+        margin-top: 12px;
+        min-height: 44px;
+    }
+    
+    .tooltip-icon:hover::after {
+        white-space: normal;
+        width: 150px;
+        bottom: auto;
+        top: 125%;
+    }
+}
+
 .input-section h2,
 .results-section h2 {
     font-size: 1.5em;
