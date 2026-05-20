@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de Compra de Casa — Portugal</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-chart-sankey"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🏠 Calculadora de Compra de Casa</h1>
+            <p>Simula todos os custos associados à compra de habitação em Portugal</p>
+            <div style="margin-top: 15px; display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
+                <button onclick="saveSimulation()" style="padding: 8px 16px; background: #28a745; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 0.9em;">💾 Guardar Simulação</button>
+                <button onclick="document.getElementById('loadFileInput').click()" style="padding: 8px 16px; background: #667eea; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 0.9em;">📂 Carregar Simulação</button>
+                <input type="file" id="loadFileInput" accept=".json" style="display: none;" onchange="loadSimulation(event)">
+            </div>
+        </div>
+        
+        <!-- SECÇÃO COMPRADORES -->
+        <div style="padding: 40px; background: linear-gradient(to bottom, #f8f9ff, white);">
+            <h2 style="margin-bottom: 20px; color: #333;">👥 Passo 0: Configurar Compradores</h2>
+            <p style="color: #666; margin-bottom: 25px;">Adicione cada comprador com os seus dados financeiros</p>
+            
+            <div id="buyersContainer" style="margin-bottom: 30px;">
+            </div>
+            
+            <button class="add-house-btn" onclick="addBuyer()">+ Adicionar Comprador</button>
+            
+            <!-- Resumo do Pool -->
+            <div class="money-pool-section" id="moneyPoolSection" style="display: none; margin-top: 40px;">
+                <div class="pool-title">💰 Fundo Conjunto</div>
+                <div class="pool-value" id="poolTotalValue">0 €</div>
+                <div class="pool-breakdown">
+                    <div class="pool-item">
+                        <div class="pool-item-label">Total Disponível</div>
+                        <div class="pool-item-value" id="poolAvailableCash">0 €</div>
+                    </div>
+                    <div class="pool-item">
+                        <div class="pool-item-label">A Contribuir</div>
+                        <div class="pool-item-value" id="poolContributing">0 €</div>
+                    </div>
+                    <div class="pool-item">
+                        <div class="pool-item-label">Em Reserva</div>
+                        <div class="pool-item-value" id="poolReserve">0 €</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- SECÇÃO COMPRA -->
+        <div style="padding: 40px; border-top: 3px solid #e0e0e0;">
+            <h2 style="margin-bottom: 20px; color: #333;">🏠 Passo 1: Dados do Imóvel a Comprar</h2>
+            <p style="color: #666; margin-bottom: 25px;">Insira os dados da casa que pretendem comprar</p>
+        
+            <div class="main-content">
+                <!-- Secção de Inputs -->
+                <div class="input-section">
+                <h2>Dados do Imóvel</h2>
+                
+                <div class="input-group">
+                    <label for="homePrice">Preço do Imóvel (€) <span class="tooltip-icon" data-tooltip="Valor de compra do imóvel (escritura)">?</span></label>
+                    <input type="number" id="homePrice" value="250000" min="0" step="5000">
+                    <div class="input-helper">Valor pelo qual vão comprar a casa</div>
+                </div>
+                
+                <div class="input-group">
+                    <label>Entrada / Capitais Próprios (€) <span class="tooltip-icon" data-tooltip="Montante efetivo para entrada no imóvel — contribuições dos compradores menos custos de escritura (IMT, Selo, Registo).">?</span></label>
+                    <div id="downPaymentDisplay" style="font-size: 1.4em; font-weight: 700; color: #667eea; padding: 10px 0;">0 €</div>
+                    <div class="input-helper">Contribuições − impostos e custos = entrada efetiva (mín. 10%)</div>
+                </div>
+                
+                <div class="input-group" style="margin-top: 10px;">
+                    <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                        <input type="checkbox" id="isPermanentResidence" checked style="width: auto;">
+                        Habitação Própria Permanente (HPP)
+                        <span class="tooltip-icon" data-tooltip="Se for HPP, paga menos IMT. Se for segunda habitação ou investimento, as taxas são mais altas.">?</span>
+                    </label>
+                </div>
+                
+                <h2 style="margin-top: 30px;">Crédito Habitação</h2>
+                
+                <div class="input-row">
+                    <div class="input-group">
+                        <label for="interestRate">Taxa de Juro Anual (%) <span class="tooltip-icon" data-tooltip="Euribor + spread. Ex: Euribor 12M (2.5%) + spread (0.9%) = 3.4%">?</span></label>
+                        <input type="number" id="interestRate" value="3.5" min="0" max="20" step="0.1">
+                        <div class="input-helper">Euribor + spread do banco</div>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="loanTerm">Prazo (Anos) <span class="tooltip-icon" data-tooltip="Prazo máximo: 40 anos (se idade + prazo ≤ 70). Mais comum: 30-35 anos.">?</span></label>
+                        <input type="number" id="loanTerm" value="30" min="1" max="40" step="1">
+                        <div class="input-helper">Máximo 40 anos (idade + prazo ≤ 70)</div>
+                    </div>
+                </div>
+                
+                <h2 style="margin-top: 30px;">IMI e Seguros</h2>
+                
+                <div class="input-row">
+                    <div class="input-group">
+                        <label for="vpt">Valor Patrimonial Tributário - VPT (€) <span class="tooltip-icon" data-tooltip="Consta da caderneta predial. Geralmente 60-80% do valor de mercado.">?</span></label>
+                        <input type="number" id="vpt" value="175000" min="0" step="5000">
+                        <div class="input-helper">Consultar caderneta predial nas Finanças</div>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="taxaIMI">Taxa IMI (%) <span class="tooltip-icon" data-tooltip="Definida pelo município. Prédios urbanos: 0.3% a 0.45%.">?</span></label>
+                        <input type="number" id="taxaIMI" value="0.35" min="0.3" max="0.45" step="0.01">
+                        <div class="input-helper">0,3% a 0,45% conforme município</div>
+                    </div>
+                </div>
+                
+                <div class="input-row">
+                    <div class="input-group">
+                        <label for="seguroVida">Seguro de Vida Mensal (€) <span class="tooltip-icon" data-tooltip="Obrigatório no crédito habitação. Valor depende da idade e capital em dívida.">?</span></label>
+                        <input type="number" id="seguroVida" value="30" min="0" step="5">
+                        <div class="input-helper">Obrigatório — depende da idade</div>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="seguroMultirriscos">Seguro Multirriscos Mensal (€) <span class="tooltip-icon" data-tooltip="Obrigatório — cobre incêndio e danos no imóvel.">?</span></label>
+                        <input type="number" id="seguroMultirriscos" value="20" min="0" step="5">
+                        <div class="input-helper">Obrigatório — cobre o imóvel</div>
+                    </div>
+                </div>
+                
+                <button class="reset-btn" onclick="resetCalculator()">Repor Valores Iniciais</button>
+            </div>
+            
+            <!-- Secção de Resultados -->
+            <div class="results-section">
+                <h2>Resumo</h2>
+                
+                <div class="results-box">
+                    <div class="result-item">
+                        <span class="result-label">Montante do Crédito:</span>
+                        <span class="result-value" id="loanAmount">0 €</span>
+                    </div>
+                    <div id="formulaLoanAmount" class="formula-breakdown" style="margin-bottom: 15px;"></div>
+                    <div class="result-item">
+                        <span class="result-label">Prestação Mensal:</span>
+                        <span class="result-value" id="monthlyMortgage">0 €</span>
+                    </div>
+                    <div id="formulaMortgage" class="formula-breakdown" style="margin-bottom: 15px;"></div>
+                    <div class="result-item">
+                        <span class="result-label">IMI Mensal:</span>
+                        <span class="result-value" id="monthlyIMI">0 €</span>
+                    </div>
+                    <div id="formulaIMI" class="formula-breakdown" style="margin-bottom: 15px;"></div>
+                    <div class="result-item">
+                        <span class="result-label">Seguro Vida:</span>
+                        <span class="result-value" id="monthlySeguroVida">0 €</span>
+                    </div>
+                    <div class="result-item">
+                        <span class="result-label">Seguro Multirriscos:</span>
+                        <span class="result-value" id="monthlySeguroMultirriscos">0 €</span>
+                    </div>
+                    <div class="result-item">
+                        <span class="result-label">Total Mensal:</span>
+                        <span class="result-value" id="totalMonthly">0 €</span>
+                    </div>
+                    <div id="formulaTotalMonthly" class="formula-breakdown" style="margin-bottom: 0;"></div>
+                </div>
+                
+                <div class="breakdown-section">
+                    <div class="breakdown-title">Custos Iniciais (Escritura)</div>
+                    <div class="breakdown-item">
+                        <span>Entrada efetiva no imóvel:</span>
+                        <span class="breakdown-value" id="breakdownDown">0 €</span>
+                    </div>
+                    <div class="breakdown-item">
+                        <span>IMT:</span>
+                        <span class="breakdown-value" id="breakdownIMT">0 €</span>
+                    </div>
+                    <div id="formulaIMT" class="formula-breakdown" style="margin-bottom: 10px;"></div>
+                    <div class="breakdown-item">
+                        <span>Imposto de Selo (escritura + crédito):</span>
+                        <span class="breakdown-value" id="breakdownIS">0 €</span>
+                    </div>
+                    <div id="formulaIS" class="formula-breakdown" style="margin-bottom: 10px;"></div>
+                    <div class="breakdown-item">
+                        <span>Registo e Escritura:</span>
+                        <span class="breakdown-value" id="breakdownRegisto">0 €</span>
+                    </div>
+                    <div class="breakdown-item">
+                        <span><strong>Total Investimento Inicial (= contribuições):</strong></span>
+                        <span class="breakdown-value" id="breakdownUpfront"><strong>0 €</strong></span>
+                    </div>
+                    <div id="formulaUpfront" class="formula-breakdown" style="margin-bottom: 0;"></div>
+                </div>
+                
+                <div class="breakdown-section">
+                    <div class="breakdown-title">Resumo do Crédito</div>
+                    <div class="breakdown-item">
+                        <span>Total de Juros Pagos:</span>
+                        <span class="breakdown-value" id="totalInterest">0 €</span>
+                    </div>
+                    <div class="breakdown-item">
+                        <span>Total Pago ao Banco:</span>
+                        <span class="breakdown-value" id="totalPaid">0 €</span>
+                    </div>
+                    <div id="interestFormula" class="formula-breakdown">
+                        <div style="margin-bottom: 10px; font-weight: 600; color: #333;">Como é calculado:</div>
+                        <div class="formula-item">
+                            <span>Prestação Mensal:</span>
+                            <span id="formulaMonthlyPayment">0 €</span>
+                        </div>
+                        <div class="formula-item">
+                            <span>Número de Prestações:</span>
+                            <span id="formulaNumPayments">360 meses</span>
+                        </div>
+                        <div class="formula-item">
+                            <span>Total Pago = Prestação × Meses</span>
+                            <span id="formulaTotalPaid">0 €</span>
+                        </div>
+                        <div class="formula-item">
+                            <span>Juros = Total Pago - Capital</span>
+                            <span id="formulaTotalInterest">0 €</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="breakdown-section">
+                    <div class="breakdown-title">Totais ao Longo do Crédito</div>
+                    <div class="breakdown-item">
+                        <span>IMI (total):</span>
+                        <span class="breakdown-value" id="totalLifeIMI">0 €</span>
+                    </div>
+                    <div class="breakdown-item">
+                        <span>Seguro de Vida (total):</span>
+                        <span class="breakdown-value" id="totalLifeSeguroVida">0 €</span>
+                    </div>
+                    <div class="breakdown-item">
+                        <span>Seguro Multirriscos (total):</span>
+                        <span class="breakdown-value" id="totalLifeSeguroMultirriscos">0 €</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Tabela de Amortização -->
+        <div style="padding: 40px; border-top: 2px solid #e0e0e0;">
+            <h2 style="margin-bottom: 20px; color: #333;">Mapa de Amortização</h2>
+            
+            <div class="tabs">
+                <button class="tab-btn active" onclick="switchTab('tab-yearly')">Resumo Anual</button>
+                <button class="tab-btn" onclick="switchTab('tab-monthly')">Detalhe Mensal (1.º Ano)</button>
+            </div>
+            
+            <div id="tab-yearly" class="tab-content active">
+                <div class="table-container">
+                    <table id="yearlyTable">
+                        <thead>
+                            <tr>
+                                <th>Ano</th>
+                                <th>Saldo Inicial</th>
+                                <th>Prestações</th>
+                                <th>Capital</th>
+                                <th>Juros</th>
+                                <th>Saldo Final</th>
+                            </tr>
+                        </thead>
+                        <tbody id="yearlyBody"></tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <div id="tab-monthly" class="tab-content">
+                <div class="table-container">
+                    <table id="monthlyTable">
+                        <thead>
+                            <tr>
+                                <th>Mês</th>
+                                <th>Saldo Inicial</th>
+                                <th>Prestação</th>
+                                <th>Capital</th>
+                                <th>Juros</th>
+                                <th>Saldo Final</th>
+                            </tr>
+                        </thead>
+                        <tbody id="monthlyBody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Secção IRS / Mais-Valias -->
+        <div style="padding: 40px; border-top: 3px solid #e0e0e0;">
+            <h2 style="margin-bottom: 10px; color: #333;">📋 Impacto no IRS — Mais-Valias</h2>
+            <p style="color: #666; margin-bottom: 25px;">Cálculo detalhado do imposto sobre mais-valias por comprador (aplicável na venda de imóveis)</p>
+            <div id="irsSection"></div>
+        </div>
+        
+        <!-- Gráficos -->
+        <div style="padding: 40px; border-top: 2px solid #e0e0e0;">
+            <h2 style="margin-bottom: 30px; color: #333;">📊 Visualizações</h2>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-bottom: 30px;">
+                <div class="chart-container">
+                    <canvas id="costBreakdownChart"></canvas>
+                </div>
+                <div class="chart-container">
+                    <canvas id="monthlyBreakdownChart"></canvas>
+                </div>
+            </div>
+            
+            <div class="chart-container">
+                <canvas id="principalInterestChart"></canvas>
+            </div>
+        </div>
+        
+        <!-- Cash Flow Diagram -->
+        <div style="padding: 40px; border-top: 2px solid #e0e0e0;">
+            <h2 style="margin-bottom: 10px; color: #333;">💸 Diagrama de Cash Flow</h2>
+            <p style="color: #666; margin-bottom: 25px;">Fluxo de dinheiro na transação (Sankey)</p>
+            <div class="chart-container" style="height: 500px;">
+                <canvas id="cashFlowSankey"></canvas>
+            </div>
+        </div>
+    </div>
+    
+    <script src="calculator.js"></script>
+    <script>
+        initCalculator();
+    </script>
+</body>
+</html>
