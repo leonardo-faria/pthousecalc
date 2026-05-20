@@ -1097,7 +1097,58 @@ function initCalculator() {
         input.addEventListener('change', updateCalculations);
     });
     
-    addBuyer();
+    // Initialize with default buyers: Marx and Engels
+    buyers = [
+        {
+            id: 1,
+            name: 'Marx',
+            startingCash: 125000,
+            contributionAmount: 125000,
+            irsRate: 46,
+            housesToSell: [
+                {
+                    id: 1,
+                    salePrice: 320000,
+                    currentBalance: 0,
+                    comissaoPercent: 5,
+                    anosDetencao: 5,
+                    valorAquisicao: 200000,
+                    isHPP: true
+                }
+            ]
+        },
+        {
+            id: 2,
+            name: 'Engels',
+            startingCash: 125000,
+            contributionAmount: 125000,
+            irsRate: 46,
+            housesToSell: [
+                {
+                    id: 2,
+                    salePrice: 250000,
+                    currentBalance: 0,
+                    comissaoPercent: 5,
+                    anosDetencao: 5,
+                    valorAquisicao: 160000,
+                    isHPP: true
+                }
+            ]
+        }
+    ];
+    nextBuyerId = 3;
+    nextHouseId = 3;
+    
+    document.getElementById('homePrice').value = 475000;
+    document.getElementById('interestRate').value = 3.5;
+    document.getElementById('loanTerm').value = 35;
+    document.getElementById('isPermanentResidence').checked = true;
+    document.getElementById('vpt').value = 332500;
+    document.getElementById('taxaIMI').value = 0.35;
+    document.getElementById('seguroVida').value = 30;
+    document.getElementById('seguroMultirriscos').value = 20;
+    
+    renderBuyers();
     updateCalculations();
 }
 
