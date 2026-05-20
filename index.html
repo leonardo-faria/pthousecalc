@@ -184,6 +184,37 @@
                     <div id="formulaTotalMonthly" class="formula-breakdown formula-spacing-none"></div>
                 </div>
                 
+                <div class="effort-rate-section">
+                    <div class="effort-rate-title">📊 Taxa de Esforço</div>
+                    <div class="effort-rate-inputs">
+                        <div class="input-group">
+                            <label for="netMonthlyIncome">Rendimento Líquido Mensal do Agregado (€)
+                                <span class="tooltip-icon" data-tooltip="Soma dos rendimentos líquidos mensais de todos os compradores. Os bancos exigem taxa de esforço ≤ 33% (recomendado) ou máx. 50%.">?</span>
+                            </label>
+                            <input type="number" id="netMonthlyIncome" value="3500" min="0" step="100" onchange="updateCalculations()" oninput="updateCalculations()">
+                            <div class="input-helper">Soma dos salários líquidos mensais (após IRS e SS)</div>
+                        </div>
+                        <div class="input-group">
+                            <label for="otherDebts">Outras Prestações Mensais (€)
+                                <span class="tooltip-icon" data-tooltip="Créditos pessoais, automóvel, cartões de crédito — tudo o que tenha prestação mensal fixa.">?</span>
+                            </label>
+                            <input type="number" id="otherDebts" value="0" min="0" step="50" onchange="updateCalculations()" oninput="updateCalculations()">
+                            <div class="input-helper">Crédito automóvel, pessoal, cartões, etc.</div>
+                        </div>
+                    </div>
+                    <div class="effort-rate-display">
+                        <div class="effort-rate-bar-container">
+                            <div class="effort-rate-bar" id="effortRateBar"></div>
+                            <div class="effort-rate-markers">
+                                <span class="marker-33">33%</span>
+                                <span class="marker-50">50%</span>
+                            </div>
+                        </div>
+                        <div class="effort-rate-value" id="effortRateValue">0%</div>
+                        <div class="effort-rate-label" id="effortRateLabel">Taxa de esforço</div>
+                    </div>
+                </div>
+                
                 <div class="breakdown-section">
                     <div class="breakdown-title">Custos Iniciais (Escritura)</div>
                     <div class="breakdown-item">

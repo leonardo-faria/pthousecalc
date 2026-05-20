@@ -483,6 +483,8 @@ function getInputValues() {
         taxaIMI: parseFloat(document.getElementById('taxaIMI').value) || 0.35,
         seguroVida: parseFloat(document.getElementById('seguroVida').value) || 0,
         seguroMultirriscos: parseFloat(document.getElementById('seguroMultirriscos').value) || 0,
+        netMonthlyIncome: parseFloat(document.getElementById('netMonthlyIncome')?.value) || 0,
+        otherDebts: parseFloat(document.getElementById('otherDebts')?.value) || 0,
     };
 }
 
@@ -819,6 +821,33 @@ function updateCalculations() {
     document.getElementById('monthlySeguroVida').textContent = formatCurrency(monthlySeguroVida);
     document.getElementById('monthlySeguroMultirriscos').textContent = formatCurrency(monthlySeguroMultirriscos);
     document.getElementById('totalMonthly').textContent = formatCurrency(totalMonthly);
+    
+    // Taxa de esforço
+    const netMonthlyIncome = parseFloat(document.getElementById('netMonthlyIncome')?.value) || 0;
+    const otherDebts = parseFloat(document.getElementById('otherDebts')?.value) || 0;
+    const totalDebtPayments = monthlyMortgage + otherDebts;
+    const effortRate = netMonthlyIncome > 0 ? (totalDebtPayments / netMonthlyIncome) * 100 : 0;
+    
+    const effortBar = document.getElementById('effortRateBar');
+    const effortValue = document.getElementById('effortRateValue');
+    const effortLabel = document.getElementById('effortRateLabel');
+    
+    if (effortBar && effortValue && effortLabel) {
+        effortBar.style.width = Math.min(effortRate, 100) + '%';
+        effortValue.textContent = effortRate.toFixed(1) + '%';
+        
+        effortValue.className = 'effort-rate-value';
+        if (effortRate <= 33) {
+            effortValue.classList.add('effort-rate-good');
+            effortLabel.textContent = `✅ Dentro do recomendado — ${formatCurrency(totalDebtPayments)} de ${formatCurrency(netMonthlyIncome)}`;
+        } else if (effortRate <= 50) {
+            effortValue.classList.add('effort-rate-warning');
+            effortLabel.textContent = `⚠️ Acima de 33% — risco moderado. Bancos podem recusar.`;
+        } else {
+            effortValue.classList.add('effort-rate-danger');
+            effortLabel.textContent = `🚨 Acima de 50% — crédito muito provavelmente recusado.`;
+        }
+    }
     
     document.getElementById('breakdownDown').textContent = formatCurrency(entrada);
     document.getElementById('breakdownIMT').textContent = formatCurrency(imt);
@@ -1174,6 +1203,8 @@ function initCalculator() {
     document.getElementById('taxaIMI').value = 0.35;
     document.getElementById('seguroVida').value = 30;
     document.getElementById('seguroMultirriscos').value = 20;
+    document.getElementById('netMonthlyIncome').value = 3500;
+    document.getElementById('otherDebts').value = 0;
     
     renderBuyers();
     updateCalculations();
@@ -1190,6 +1221,8 @@ function saveSimulation() {
         taxaIMI: document.getElementById('taxaIMI').value,
         seguroVida: document.getElementById('seguroVida').value,
         seguroMultirriscos: document.getElementById('seguroMultirriscos').value,
+        netMonthlyIncome: document.getElementById('netMonthlyIncome').value,
+        otherDebts: document.getElementById('otherDebts').value,
     };
     
     const state = {
@@ -1235,6 +1268,8 @@ function loadSimulation(event) {
             document.getElementById('taxaIMI').value = state.inputs.taxaIMI;
             document.getElementById('seguroVida').value = state.inputs.seguroVida;
             document.getElementById('seguroMultirriscos').value = state.inputs.seguroMultirriscos;
+            if (state.inputs.netMonthlyIncome != null) document.getElementById('netMonthlyIncome').value = state.inputs.netMonthlyIncome;
+            if (state.inputs.otherDebts != null) document.getElementById('otherDebts').value = state.inputs.otherDebts;
             
             // Restore state
             buyers = state.buyers;
@@ -1322,6 +1357,23 @@ function exportTXT() {
     txt += line('Seguro Multirriscos:', fmt(seguroMultirriscos)) + '\n';
     txt += line('TOTAL MENSAL:', fmt(totalMonthly)) + '\n';
     txt += '\n';
+    
+    // Taxa de esforço
+    const netIncome = parseFloat(document.getElementById('netMonthlyIncome')?.value) || 0;
+    const otherDebtsVal = parseFloat(document.getElementById('otherDebts')?.value) || 0;
+    if (netIncome > 0) {
+        const totalDebts = monthlyMortgage + otherDebtsVal;
+        const effortRateTxt = (totalDebts / netIncome * 100).toFixed(1);
+        txt += '  TAXA DE ESFORÇO\n';
+        txt += sepLight + '\n';
+        txt += line('Rendimento líquido mensal:', fmt(netIncome)) + '\n';
+        if (otherDebtsVal > 0) {
+            txt += line('Outras prestações:', fmt(otherDebtsVal)) + '\n';
+        }
+        txt += line('Total prestações / Rendimento:', effortRateTxt + '%') + '\n';
+        txt += line('Avaliação:', effortRateTxt <= 33 ? '✅ Dentro do recomendado (≤33%)' : effortRateTxt <= 50 ? '⚠️ Acima do recomendado (33-50%)' : '🚨 Elevado (>50%)') + '\n';
+        txt += '\n';
+    }
     
     // Initial costs
     txt += '  CUSTOS INICIAIS (ESCRITURA)\n';

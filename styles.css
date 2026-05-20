@@ -96,6 +96,10 @@ body {
         margin-bottom: 15px;
     }
     
+    .effort-rate-inputs {
+        grid-template-columns: 1fr;
+    }
+    
     .header {
         padding: 25px 20px;
     }
@@ -1365,6 +1369,98 @@ table td:first-child {
     border-radius: 6px;
     font-size: 1em;
 }
+
+/* Effort rate (taxa de esforço) */
+.effort-rate-section {
+    background: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 10px;
+    padding: 20px;
+    margin: 20px 0;
+}
+
+.effort-rate-title {
+    font-weight: 700;
+    font-size: 1.1em;
+    color: #333;
+    margin-bottom: 15px;
+}
+
+.effort-rate-inputs {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.effort-rate-display {
+    text-align: center;
+}
+
+.effort-rate-bar-container {
+    position: relative;
+    height: 24px;
+    background: linear-gradient(to right, #28a745 0%, #28a745 33%, #ffc107 33%, #ffc107 50%, #dc3545 50%, #dc3545 100%);
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 8px;
+}
+
+.effort-rate-bar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 0%;
+    background: rgba(0, 0, 0, 0.25);
+    border-right: 3px solid #333;
+    transition: width 0.3s ease;
+}
+
+.effort-rate-markers {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 100%;
+    pointer-events: none;
+}
+
+.effort-rate-markers .marker-33 {
+    position: absolute;
+    left: 33%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 0.7em;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.effort-rate-markers .marker-50 {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 0.7em;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.effort-rate-value {
+    font-size: 2em;
+    font-weight: 800;
+    margin: 8px 0 4px;
+    transition: color 0.3s ease;
+}
+
+.effort-rate-label {
+    font-size: 0.9em;
+    color: #666;
+}
+
+.effort-rate-good { color: #28a745; }
+.effort-rate-warning { color: #e67e00; }
+.effort-rate-danger { color: #dc3545; }
 
 /* Section titles */
 .section-title {
