@@ -1823,23 +1823,8 @@ table td:first-child {
 }
 
 /* Print button styles */
-.header-btn-txt {
-    background: linear-gradient(135deg, #00b09b, #96c93d);
-}
-
-.header-btn-txt:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 15px rgba(0, 176, 155, 0.4);
-}
-
-.header-btn-print {
-    background: linear-gradient(135deg, #667eea, #764ba2);
-}
-
-.header-btn-print:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
-}
+.header-btn-txt { background: #17a2b8; }
+.header-btn-print { background: #6c757d; }
 
 /* ==========================================
    PRINT STYLES

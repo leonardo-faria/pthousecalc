@@ -1371,8 +1371,10 @@ function exportTXT() {
     const a = document.createElement('a');
     a.href = url;
     a.download = `simulacao-casa-${new Date().toISOString().slice(0, 10)}.txt`;
+    document.body.appendChild(a);
     a.click();
-    URL.revokeObjectURL(url);
+    document.body.removeChild(a);
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
 
 // Export for testing (Node.js / CommonJS)
