@@ -236,6 +236,7 @@ function renderBuyers() {
                         <div style="margin-bottom: 12px;">
                             <div style="font-size: 0.85em; color: #999; margin-bottom: 3px;">Total Disponível</div>
                             <div style="font-size: 1.4em; font-weight: 700; color: #28a745;">${formatCurrency(Math.max(0, availableCash))}</div>
+                            ${houseProceeds > 0 ? `<div style="font-size: 0.8em; color: #666; margin-top: 2px;">(${formatCurrency(startingCash)} poupanças + ${formatCurrency(houseProceeds)} líquido vendas)</div>` : ''}
                         </div>
                         <div class="input-group" style="margin-top: 15px;">
                             <label for="contribution_${buyer.id}" style="font-size: 0.9em;">Contribuição (€)</label>
@@ -246,7 +247,12 @@ function renderBuyers() {
                                 <button onclick="updateBuyerField(${buyer.id}, 'contributionAmount', ${Math.max(0, availableCash)})" 
                                         class="use-total-btn">Usar Total</button>
                             </div>
-                            <div class="input-helper" style="margin-top: 5px;">Reserva: ${formatCurrency(Math.max(0, availableCash - contribution))}</div>
+                        </div>
+                        <div class="buyer-remaining">
+                            <div class="buyer-remaining-label">💰 Dinheiro restante após a compra</div>
+                            <div class="buyer-remaining-value" style="color: ${Math.max(0, availableCash - contribution) > 0 ? '#28a745' : '#dc3545'};">
+                                ${formatCurrency(Math.max(0, availableCash - contribution))}
+                            </div>
                         </div>
                     </div>
                 `;

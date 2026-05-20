@@ -1223,6 +1223,26 @@ table td:first-child {
     background: #5a6fd6;
 }
 
+.buyer-remaining {
+    margin-top: 15px;
+    padding: 12px;
+    background: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    text-align: center;
+}
+
+.buyer-remaining-label {
+    font-size: 0.85em;
+    color: #555;
+    margin-bottom: 4px;
+}
+
+.buyer-remaining-value {
+    font-size: 1.5em;
+    font-weight: 800;
+}
+
 /* House sell form grids (JS-generated) */
 .house-sell-grid-2col {
     display: grid;
