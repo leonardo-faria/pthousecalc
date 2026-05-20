@@ -44,6 +44,30 @@ body {
     padding: 40px;
 }
 
+/* Page section classes (replace inline padding) */
+.page-section {
+    padding: 40px;
+}
+
+.section-buyers {
+    background: linear-gradient(to bottom, #f8f9ff, white);
+}
+
+.section-bordered {
+    border-top: 3px solid #e0e0e0;
+}
+
+.section-bordered-light {
+    border-top: 2px solid #e0e0e0;
+}
+
+.charts-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+    margin-bottom: 30px;
+}
+
 @media (max-width: 1200px) {
     .main-content {
         grid-template-columns: 1fr;
@@ -54,11 +78,22 @@ body {
 @media (max-width: 768px) {
     body {
         padding: 10px;
+        overflow-x: hidden;
     }
     
     .container {
         border-radius: 8px;
         box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    }
+    
+    .page-section {
+        padding: 20px 15px;
+    }
+    
+    .charts-grid {
+        grid-template-columns: 1fr;
+        gap: 15px;
+        margin-bottom: 15px;
     }
     
     .header {
@@ -282,6 +317,16 @@ body {
 @media (max-width: 480px) {
     body {
         padding: 8px;
+    }
+    
+    .page-section {
+        padding: 15px 12px;
+    }
+    
+    .charts-grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+        margin-bottom: 12px;
     }
     
     .header {
@@ -1117,4 +1162,147 @@ table td:first-child {
     font-size: 1.3em;
     font-weight: bold;
     margin-top: 5px;
+}
+
+/* Contribution section (JS-generated) */
+.contribution-section {
+    margin-top: 40px;
+    padding: 30px;
+    background: #f0f7ff;
+    border-radius: 8px;
+    border-top: 3px solid #667eea;
+}
+
+.contribution-title {
+    margin-bottom: 25px;
+    color: #333;
+    font-size: 1.2em;
+}
+
+.contribution-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+}
+
+.contribution-card {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    border-left: 4px solid #667eea;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.contribution-input-row {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.contribution-input-row .contribution-input {
+    flex: 1;
+}
+
+.use-total-btn {
+    padding: 8px 12px;
+    background: #667eea;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.8em;
+    white-space: nowrap;
+    min-height: 44px;
+}
+
+.use-total-btn:hover {
+    background: #5a6fd6;
+}
+
+/* House sell form grids (JS-generated) */
+.house-sell-grid-2col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.house-sell-grid-3col {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.house-sell-label {
+    display: block;
+    font-size: 0.8em;
+    color: #666;
+    margin-bottom: 4px;
+    font-weight: 500;
+}
+
+.house-sell-input {
+    padding: 10px 8px;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    width: 100%;
+    font-size: 16px;
+    box-sizing: border-box;
+}
+
+.house-sell-input:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+/* Mobile overrides for JS-generated content */
+@media (max-width: 768px) {
+    .contribution-section {
+        padding: 20px 15px;
+        margin-top: 30px;
+    }
+    
+    .contribution-cards {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+    
+    .contribution-card {
+        padding: 15px;
+    }
+    
+    .house-sell-grid-3col {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media (max-width: 480px) {
+    .contribution-section {
+        padding: 15px 12px;
+        margin-top: 20px;
+    }
+    
+    .contribution-card {
+        padding: 12px;
+    }
+    
+    .contribution-input-row {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .use-total-btn {
+        width: 100%;
+        padding: 10px;
+    }
+    
+    .house-sell-grid-2col {
+        grid-template-columns: 1fr;
+    }
+    
+    .house-sell-grid-3col {
+        grid-template-columns: 1fr;
+    }
 }

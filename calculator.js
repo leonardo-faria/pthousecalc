@@ -194,10 +194,10 @@ function renderBuyers() {
     
     const contributionSection = document.createElement('div');
     contributionSection.setAttribute('data-contribution-section', 'true');
-    contributionSection.style.cssText = 'margin-top: 40px; padding: 30px; background: #f0f7ff; border-radius: 8px; border-top: 3px solid #667eea;';
+    contributionSection.className = 'contribution-section';
     contributionSection.innerHTML = `
-        <h3 style="margin-bottom: 25px; color: #333; font-size: 1.2em;">💰 Quanto Cada Comprador Contribui?</h3>
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;">
+        <h3 class="contribution-title">💰 Quanto Cada Comprador Contribui?</h3>
+        <div class="contribution-cards">
             ${buyers.map(buyer => {
                 const startingCash = parseFloat(buyer.startingCash) || 0;
                 const houseProceeds = calculateBuyerHouseProceeds(buyer);
@@ -209,7 +209,7 @@ function renderBuyers() {
                 const contribution = parseFloat(buyer.contributionAmount) || availableCash;
                 
                 return `
-                    <div style="background: white; padding: 20px; border-radius: 8px; border-left: 4px solid #667eea; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
+                    <div class="contribution-card">
                         <div style="font-weight: 700; color: #333; margin-bottom: 15px; font-size: 1.1em;">${buyer.name}</div>
                         <div style="margin-bottom: 12px;">
                             <div style="font-size: 0.85em; color: #999; margin-bottom: 3px;">Total Disponível</div>
@@ -217,12 +217,12 @@ function renderBuyers() {
                         </div>
                         <div class="input-group" style="margin-top: 15px;">
                             <label for="contribution_${buyer.id}" style="font-size: 0.9em;">Contribuição (€)</label>
-                            <div style="display: flex; gap: 8px; align-items: center;">
+                            <div class="contribution-input-row">
                                 <input type="number" id="contribution_${buyer.id}" value="${contribution}" min="0" max="${Math.max(0, availableCash)}" step="5000" 
-                                       class="contribution-input" style="flex: 1;"
+                                       class="contribution-input"
                                        onchange="updateBuyerField(${buyer.id}, 'contributionAmount', this.value)">
                                 <button onclick="updateBuyerField(${buyer.id}, 'contributionAmount', ${Math.max(0, availableCash)})" 
-                                        style="padding: 8px 12px; background: #667eea; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 0.8em; white-space: nowrap;">Usar Total</button>
+                                        class="use-total-btn">Usar Total</button>
                             </div>
                             <div class="input-helper" style="margin-top: 5px;">Reserva: ${formatCurrency(Math.max(0, availableCash - contribution))}</div>
                         </div>
@@ -381,37 +381,37 @@ function renderBuyerHouses(buyerId) {
                         <span class="tooltip-icon" data-tooltip="Se HPP e reinvestir em nova HPP dentro de 36 meses: isenção de mais-valias. Se não for HPP: 50% tributado à taxa marginal.">?</span>
                     </label>
                 </div>
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px;">
+                <div class="house-sell-grid-2col">
                     <div>
-                        <label style="display: block; font-size: 0.8em; color: #666; margin-bottom: 4px; font-weight: 500;">Preço de Venda (€)</label>
+                        <label class="house-sell-label">Preço de Venda (€)</label>
                         <input type="number" value="${house.salePrice}" min="0" step="5000" 
-                               style="padding: 8px; border: 1px solid #e0e0e0; border-radius: 4px; width: 100%;"
+                               class="house-sell-input"
                                onchange="updateBuyerHouse(${buyerId}, ${house.id}, 'salePrice', this.value)">
                     </div>
                     <div>
-                        <label style="display: block; font-size: 0.8em; color: #666; margin-bottom: 4px; font-weight: 500;">Crédito em Dívida (€)</label>
+                        <label class="house-sell-label">Crédito em Dívida (€)</label>
                         <input type="number" value="${house.currentBalance}" min="0" step="5000" 
-                               style="padding: 8px; border: 1px solid #e0e0e0; border-radius: 4px; width: 100%;"
+                               class="house-sell-input"
                                onchange="updateBuyerHouse(${buyerId}, ${house.id}, 'currentBalance', this.value)">
                     </div>
                 </div>
-                <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 10px;">
+                <div class="house-sell-grid-3col">
                     <div>
-                        <label style="display: block; font-size: 0.8em; color: #666; margin-bottom: 4px; font-weight: 500;">Valor Aquisição (€)</label>
+                        <label class="house-sell-label">Valor Aquisição (€)</label>
                         <input type="number" value="${house.valorAquisicao}" min="0" step="5000" 
-                               style="padding: 8px; border: 1px solid #e0e0e0; border-radius: 4px; width: 100%;"
+                               class="house-sell-input"
                                onchange="updateBuyerHouse(${buyerId}, ${house.id}, 'valorAquisicao', this.value)">
                     </div>
                     <div>
-                        <label style="display: block; font-size: 0.8em; color: #666; margin-bottom: 4px; font-weight: 500;">Anos de Posse</label>
+                        <label class="house-sell-label">Anos de Posse</label>
                         <input type="number" value="${house.anosDetencao}" min="0" step="1" 
-                               style="padding: 8px; border: 1px solid #e0e0e0; border-radius: 4px; width: 100%;"
+                               class="house-sell-input"
                                onchange="updateBuyerHouse(${buyerId}, ${house.id}, 'anosDetencao', this.value)">
                     </div>
                     <div>
-                        <label style="display: block; font-size: 0.8em; color: #666; margin-bottom: 4px; font-weight: 500;">Comissão (%)</label>
+                        <label class="house-sell-label">Comissão (%)</label>
                         <input type="number" value="${house.comissaoPercent}" min="0" max="10" step="0.5" 
-                               style="padding: 8px; border: 1px solid #e0e0e0; border-radius: 4px; width: 100%;"
+                               class="house-sell-input"
                                onchange="updateBuyerHouse(${buyerId}, ${house.id}, 'comissaoPercent', this.value)">
                     </div>
                 </div>

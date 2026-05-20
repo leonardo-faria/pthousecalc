@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#667eea">
     <title>Calculadora de Compra de Casa — Portugal</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-chart-sankey"></script>
@@ -21,7 +22,7 @@
         </div>
         
         <!-- SECÇÃO COMPRADORES -->
-        <div style="padding: 40px; background: linear-gradient(to bottom, #f8f9ff, white);">
+        <div class="page-section section-buyers">
             <h2 style="margin-bottom: 20px; color: #333;">👥 Passo 0: Configurar Compradores</h2>
             <p style="color: #666; margin-bottom: 25px;">Adicione cada comprador com os seus dados financeiros</p>
             
@@ -52,7 +53,7 @@
         </div>
         
         <!-- SECÇÃO COMPRA -->
-        <div style="padding: 40px; border-top: 3px solid #e0e0e0;">
+        <div class="page-section section-bordered">
             <h2 style="margin-bottom: 20px; color: #333;">🏠 Passo 1: Dados do Imóvel a Comprar</h2>
             <p style="color: #666; margin-bottom: 25px;">Insira os dados da casa que pretendem comprar</p>
         
@@ -242,14 +243,14 @@
         </div>
         
         <!-- Secção IRS / Mais-Valias -->
-        <div style="padding: 40px; border-top: 3px solid #e0e0e0;">
+        <div class="page-section section-bordered">
             <h2 style="margin-bottom: 10px; color: #333;">📋 Impacto no IRS — Mais-Valias</h2>
             <p style="color: #666; margin-bottom: 25px;">Cálculo detalhado do imposto sobre mais-valias por comprador (aplicável na venda de imóveis)</p>
             <div id="irsSection"></div>
         </div>
         
         <!-- Tabela de Amortização -->
-        <div style="padding: 40px; border-top: 2px solid #e0e0e0;">
+        <div class="page-section section-bordered-light">
             <h2 style="margin-bottom: 20px; color: #333;">Mapa de Amortização</h2>
             
             <div class="tabs">
@@ -295,10 +296,10 @@
         </div>
         
         <!-- Gráficos -->
-        <div style="padding: 40px; border-top: 2px solid #e0e0e0;">
+        <div class="page-section section-bordered-light">
             <h2 style="margin-bottom: 30px; color: #333;">📊 Visualizações</h2>
             
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-bottom: 30px;">
+            <div class="charts-grid">
                 <div class="chart-container">
                     <canvas id="costBreakdownChart"></canvas>
                 </div>
